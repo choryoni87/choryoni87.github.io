@@ -1,0 +1,54 @@
+{
+  "site": {
+    "title": "우리 가족 영상",
+    "tagline": "올라온 순서대로, 천천히 보세요.",
+    "owner": "가족"
+  },
+  "videos": [
+    {
+      "id": "demo-5",
+      "videoId": "9bZkp7q19f0",
+      "title": "추석 가족 식사",
+      "displayTitle": "추석, 다 같이 모인 저녁",
+      "description": "오랜만에 다 모였어요. 큰집 마당에서 잠깐 찍은 영상이에요.",
+      "date": "2026-09-29",
+      "note": "고기 굽는 소리"
+    },
+    {
+      "id": "demo-4",
+      "videoId": "LXb3EKWsInQ",
+      "title": "할머니 생신",
+      "displayTitle": "할머니 생신 — 케이크 컷",
+      "description": "촛불 부는 장면만 짧게. 다음에 같이 못 모인 가족도 볼 수 있게 올려요.",
+      "date": "2026-04-12",
+      "note": ""
+    },
+    {
+      "id": "demo-3",
+      "videoId": "aqz-KE-bpKQ",
+      "title": "조카 첫걸음",
+      "displayTitle": "조카, 거실에서 두 걸음",
+      "description": "두 걸음 가다가 주저앉았는데, 그 표정이 너무 귀여워요.",
+      "date": "2025-11-03",
+      "note": "맨 끝에 박수 소리"
+    },
+    {
+      "id": "demo-2",
+      "videoId": "M7lc1UVf-VE",
+      "title": "제주 여름",
+      "displayTitle": "제주, 협재 바닷가",
+      "description": "바람이 셌던 날. 아이들 모자 날아가는 장면이 백미입니다.",
+      "date": "2025-07-21",
+      "note": ""
+    },
+    {
+      "id": "demo-1",
+      "videoId": "jNQXAC9IVRw",
+      "title": "새해 첫 모임",
+      "displayTitle": "새해, 다같이 인사",
+      "description": "거실에서 새해 인사 한 마디씩. 짧지만 시작 영상으로 좋아요.",
+      "date": "2025-01-01",
+      "note": "이 사이트의 첫 영상"
+    }
+  ]
+}

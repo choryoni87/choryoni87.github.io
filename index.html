@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>우리 가족 영상</title>
+    <meta name="description" content="우리 가족이 올린 영상을 한 곳에 모았습니다." />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="preconnect" href="https://i.ytimg.com" />
+    <link rel="preconnect" href="https://www.youtube-nocookie.com" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__inner">
+        <figure class="hero__photo">
+          <div class="hero__photo-wrap">
+            <span class="hero__photo-tape" aria-hidden="true"></span>
+            <div class="hero__photo-frame">
+              <img
+                src="assets/hero.jpg"
+                alt="가족 사진"
+                width="450"
+                height="600"
+                loading="eager"
+                fetchpriority="high"
+                decoding="async"
+              />
+            </div>
+          </div>
+        </figure>
+        <div class="hero__text">
+          <p class="hero__eyebrow">가족 아카이브</p>
+          <h1 class="hero__title" data-site-title>우리 가족 영상</h1>
+          <p class="hero__tagline" data-site-tagline>
+            올라온 순서대로, 천천히 보세요.
+          </p>
+          <p class="hero__hint">
+            제목·메모는 검색으로, 연도는 아래 버튼으로 골라요.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="section" aria-labelledby="all-heading">
+        <div class="section__head section__head--with-controls">
+          <div>
+            <h2 id="all-heading" class="section__title">전체</h2>
+            <p class="section__sub" data-count></p>
+          </div>
+          <form class="controls" role="search" onsubmit="return false;">
+            <label class="visually-hidden" for="search">제목·메모로 찾기</label>
+            <input
+              id="search"
+              type="search"
+              placeholder="제목이나 짧은 메모로 찾기"
+              autocomplete="off"
+              data-search
+            />
+          </form>
+        </div>
+        <div class="filters" data-filters aria-label="연도"></div>
+        <ul class="rows" data-list="all" aria-live="polite"></ul>
+        <p class="empty" data-empty hidden>찾는 영상이 없어요. 다른 단어로 한 번 더 시도해 보세요.</p>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <p>이 사이트는 가족용입니다. 링크 공유는 가족끼리만.</p>
+    </footer>
+
+    <template id="row-template">
+      <li class="row">
+        <button class="row__main" type="button" aria-expanded="false">
+          <span class="row__thumb">
+            <img alt="" loading="lazy" decoding="async" />
+          </span>
+          <span class="row__body">
+            <span class="row__title"></span>
+            <span class="row__meta">
+              <time class="row__date"></time>
+            </span>
+            <span class="row__desc"></span>
+          </span>
+          <span class="row__chev" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20">
+              <path d="M8 5l8 7-8 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+        <div class="row__player" hidden>
+          <div class="row__player-inner"></div>
+        </div>
+      </li>
+    </template>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>

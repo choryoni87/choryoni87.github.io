@@ -1,0 +1,668 @@
+/* Paperlogy — Google Fonts 비포함, OFL(fonts-archive) woff2 */
+@font-face {
+  font-family: "Paperlogy";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy@main/Paperlogy-4Regular.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "Paperlogy";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy@main/Paperlogy-5Medium.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "Paperlogy";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy@main/Paperlogy-6SemiBold.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "Paperlogy";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy@main/Paperlogy-7Bold.woff2")
+    format("woff2");
+}
+
+:root {
+  --bg: oklch(0.981 0.01 80);
+  --bg-soft: oklch(0.96 0.014 76);
+  --bg-elev: oklch(0.996 0.006 82);
+  /* 목록 패널은 아래로 살짝만 깊어지는 그라데이션(단색 ‘진흙’ 톤 제거) */
+  --main-panel-a: oklch(0.99 0.009 80);
+  --main-panel-b: oklch(0.958 0.016 78);
+  --main-panel-border: oklch(0.87 0.012 77);
+  --main-panel-shade: oklch(0.35 0.025 50 / 0.09);
+  /* 본문·제목: 같은 팔레트에서 역할마다 톤만 나눔(회색 박스 탈출) */
+  --text-body: oklch(0.31 0.028 48);
+  --text-ink: oklch(0.22 0.045 46);
+  --text-lead: oklch(0.38 0.035 52);
+  --text-dim: oklch(0.48 0.022 55);
+  --text-caption: oklch(0.46 0.055 40);
+  --text-date: oklch(0.44 0.06 35);
+  --text-blurb: oklch(0.4 0.032 70);
+  --text-eyebrow: oklch(0.52 0.12 32);
+  --text-chevron: oklch(0.58 0.03 60);
+  --fg: var(--text-body);
+  --fg-muted: var(--text-dim);
+  --fg-subtle: var(--text-chevron);
+  --border: oklch(0.89 0.01 76);
+  --border-strong: oklch(0.83 0.014 74);
+  --accent: oklch(0.585 0.140 38);
+  --accent-press: oklch(0.515 0.150 35);
+  --accent-fg: oklch(0.985 0.012 80);
+  --ring: oklch(0.65 0.13 38 / 0.35);
+
+  --radius-sm: 6px;
+  --radius: 8px;
+  --radius-lg: 14px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --font-sans: "Paperlogy", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui,
+    sans-serif;
+  --font-display: "Paperlogy", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui,
+    sans-serif;
+
+  --container: 880px;
+  --container-narrow: 720px;
+
+  /* 영상 한 줄: 패널보다 밝은 ‘카드’ 한 종류(줄무늬 제거) */
+  --row-surface: oklch(0.999 0.005 84);
+  --row-border: oklch(0.9 0.01 78);
+  --row-shadow: 0 1px 0 oklch(1 0.006 90 / 0.65) inset, 0 2px 10px -3px var(--main-panel-shade);
+  --row-shadow-hover: 0 1px 0 oklch(1 0.006 90 / 0.5) inset, 0 5px 16px -4px var(--main-panel-shade);
+  --row-open-border: oklch(0.82 0.055 38);
+  --row-open-bg: oklch(0.992 0.016 50);
+  --row-open-ring: oklch(0.78 0.06 38 / 0.2);
+  --row-player-mix: oklch(0.955 0.016 78);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-body);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  font-feature-settings: "tnum" 0;
+  letter-spacing: -0.01em;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+a:hover {
+  color: var(--accent-press);
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 0.9em;
+  background: var(--bg-soft);
+  padding: 0.05em 0.35em;
+  border-radius: var(--radius-sm);
+  color: var(--text-ink);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  padding: 4.5rem 1.25rem 3.25rem;
+}
+
+.hero__inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(150px, 200px) 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+/* 앨범/폴라로이드: 밝은 매트 + 아래로 두꺼운 흰 여백 + 떠 있는 그림자 */
+.hero__photo {
+  margin: 0;
+  justify-self: start;
+}
+
+.hero__photo-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 200px;
+  padding: 0.5rem 0.5rem 1.15rem 0.5rem;
+  border-radius: 3px 3px 4px 4px;
+  background: linear-gradient(
+    160deg,
+    oklch(0.99 0.012 80) 0%,
+    oklch(0.955 0.02 75) 48%,
+    oklch(0.9 0.028 70) 100%
+  );
+  border: 1px solid oklch(0.82 0.02 70);
+  box-shadow:
+    0 1px 0 oklch(0.99 0.01 90 / 0.55) inset,
+    0 22px 44px -16px oklch(0.32 0.04 45 / 0.25),
+    0 8px 20px -8px oklch(0.38 0.03 48 / 0.14);
+  transform: rotate(-1.2deg);
+  transform-origin: 50% 60%;
+  transition: transform 320ms var(--ease), box-shadow 320ms var(--ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero__photo-wrap:hover {
+    transform: rotate(-0.6deg) translateY(-3px);
+    box-shadow:
+      0 1px 0 oklch(0.99 0.01 90 / 0.55) inset,
+      0 28px 52px -18px oklch(0.3 0.045 45 / 0.28),
+      0 10px 24px -8px oklch(0.35 0.03 48 / 0.16);
+  }
+}
+
+/* 마스킹 테이프 느낌(상단, 전체 보더가 아닌 짧은 띠) */
+.hero__photo-tape {
+  position: absolute;
+  z-index: 1;
+  top: -0.28rem;
+  left: 50%;
+  width: 38%;
+  min-width: 3.2rem;
+  height: 0.6rem;
+  transform: translateX(-50%) rotate(-1.5deg);
+  border-radius: 1px;
+  background: oklch(0.94 0.03 78 / 0.9);
+  box-shadow: 0 1px 2px oklch(0.3 0.02 50 / 0.12);
+  pointer-events: none;
+}
+
+.hero__photo-frame {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 1px;
+  overflow: hidden;
+  background: oklch(0.2 0.02 50);
+  box-shadow: inset 0 0 0 1px oklch(0.45 0.02 55 / 0.35);
+}
+
+/* 사진 위 은은한 비네트 + 위쪽 기류 하이라이트(액자 위 유리) */
+.hero__photo-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    oklch(0.99 0.01 90 / 0.22) 0%,
+    transparent 32%,
+    transparent 55%,
+    oklch(0.12 0.03 45 / 0.22) 100%
+  );
+}
+
+.hero__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+  display: block;
+}
+
+.hero__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.825rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-eyebrow);
+  font-weight: 600;
+}
+
+.hero__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4.5vw, 2.75rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.75rem;
+  color: var(--text-ink);
+}
+
+.hero__tagline {
+  font-size: 1.0625rem;
+  margin: 0 0 1rem;
+  color: var(--text-lead);
+  max-width: 32ch;
+}
+
+.hero__hint {
+  font-size: 0.9rem;
+  color: var(--text-caption);
+  margin: 0;
+  max-width: 36ch;
+}
+
+/* ---------- Sections ---------- */
+
+.main {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 1rem 2.5rem;
+}
+
+/* 목록 전체: 은은한 수직 그라데이션 + 얇은 테두리(앨범 한 장을 펼친 느낌) */
+.main .section {
+  background: linear-gradient(
+    180deg,
+    var(--main-panel-a) 0%,
+    var(--main-panel-b) 100%
+  );
+  border: 1px solid var(--main-panel-border);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 0 oklch(1 0.008 92 / 0.45) inset,
+    0 16px 40px -24px var(--main-panel-shade);
+  padding: 2.25rem 1.25rem 2.5rem;
+}
+
+.section {
+  padding: 4rem 0 1rem;
+}
+
+.section + .section {
+  border-top: 1px solid var(--border);
+  margin-top: 1rem;
+  padding-top: 3rem;
+}
+
+/* 첫(유일) 섹션이 main 바로 아래일 때: 헤어와의 간격 */
+.main > .section:first-child {
+  padding-top: 3.25rem;
+}
+
+.section__head {
+  margin-bottom: 1.5rem;
+}
+
+.section__head--with-controls {
+  display: grid;
+  grid-template-columns: 1fr minmax(220px, 320px);
+  gap: 1.25rem 2rem;
+  align-items: end;
+  margin-bottom: 1rem;
+}
+
+.section__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.005em;
+  margin: 0 0 0.25rem;
+  color: var(--text-ink);
+}
+
+.section__sub {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+
+/* ---------- Controls ---------- */
+
+.controls input[type="search"] {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+  color: var(--text-body);
+  font: inherit;
+  transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease);
+}
+
+.controls input[type="search"]::placeholder {
+  color: var(--text-dim);
+}
+
+.controls input[type="search"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.filter-pill {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  color: var(--text-dim);
+  border-radius: 999px;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.825rem;
+  cursor: pointer;
+  transition: color 180ms var(--ease), border-color 180ms var(--ease), background 180ms var(--ease);
+}
+
+.filter-pill:hover {
+  color: var(--text-ink);
+  border-color: var(--border-strong);
+}
+
+.filter-pill[aria-pressed="true"] {
+  color: var(--accent-press);
+  border-color: var(--accent);
+  background: oklch(0.99 0.03 40);
+  font-weight: 600;
+}
+
+/* ---------- Rows (list) ---------- */
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.row {
+  margin: 0;
+}
+
+.row__main {
+  display: grid;
+  grid-template-columns: 144px 1fr 24px;
+  gap: 1.25rem;
+  align-items: stretch;
+  width: 100%;
+  padding: 1.05rem 1.1rem 1.05rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--row-border);
+  background: var(--row-surface);
+  box-shadow: var(--row-shadow);
+  transition: background 200ms var(--ease), border-color 200ms var(--ease), box-shadow 200ms var(--ease),
+    transform 260ms var(--ease);
+}
+
+.row__main:hover {
+  background: oklch(1 0.004 85);
+  border-color: oklch(0.86 0.012 78);
+  box-shadow: var(--row-shadow-hover);
+  transform: translateY(-1px);
+}
+
+.row__main[aria-expanded="true"] {
+  background: var(--row-open-bg);
+  border-color: var(--row-open-border);
+  box-shadow: 0 0 0 1px var(--row-open-ring), var(--row-shadow);
+  transform: translateY(0);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.row__main:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ring), var(--row-shadow);
+}
+
+.row__thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 144px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: oklch(0.92 0.012 75);
+  flex-shrink: 0;
+}
+
+.row__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 320ms var(--ease);
+}
+
+.row__main:hover .row__thumb img {
+  transform: scale(1.025);
+}
+
+.row__thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(20, 14, 8, 0.18));
+  pointer-events: none;
+}
+
+.row__play {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: oklch(0.985 0.012 80 / 0.92);
+  color: var(--accent-press);
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.row__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.row__title {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-ink);
+  letter-spacing: -0.005em;
+}
+
+.row__meta {
+  display: block;
+  font-size: 0.825rem;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.row__date {
+  color: var(--text-date);
+}
+
+.row__desc {
+  color: var(--text-blurb);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  max-width: 60ch;
+}
+
+.row__chev {
+  align-self: center;
+  color: var(--text-chevron);
+  transition: transform 240ms var(--ease), color 240ms var(--ease);
+}
+
+.row__main[aria-expanded="true"] .row__chev {
+  transform: rotate(90deg);
+  color: var(--accent);
+}
+
+.row__player {
+  margin-top: 0;
+  padding: 0;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.row__main[aria-expanded="true"] + .row__player {
+  display: block;
+  background: linear-gradient(180deg, var(--row-open-bg) 0%, var(--row-player-mix) 100%);
+  border: 1px solid var(--row-open-border);
+  border-top: none;
+  margin-top: -1px;
+  padding: 0.5rem 1rem 1rem 1rem;
+  box-shadow: 0 4px 14px -8px var(--main-panel-shade);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.row__player-inner {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  background: oklch(0.18 0.01 60);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.row__player-inner iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ---------- Empty / Footer ---------- */
+
+.empty {
+  margin: 1.5rem 0 3rem;
+  padding: 1.25rem 1rem;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  color: var(--text-lead);
+  text-align: center;
+}
+
+.foot {
+  max-width: var(--container);
+  margin: 3rem auto 4rem;
+  padding: 2rem 1.25rem 0;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 0.875rem;
+}
+
+.foot p {
+  margin: 0;
+  color: var(--text-caption);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 720px) {
+  .hero {
+    padding: 3rem 1rem 2.5rem;
+  }
+  .hero__inner {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    text-align: left;
+  }
+  .hero__photo {
+    width: 140px;
+  }
+  .hero__photo-wrap {
+    max-width: none;
+    width: 100%;
+    padding: 0.4rem 0.4rem 0.9rem 0.4rem;
+    transform: rotate(-0.8deg);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .hero__photo-wrap:hover {
+      transform: rotate(-0.4deg) translateY(-2px);
+    }
+  }
+  .hero__photo-frame {
+    aspect-ratio: 1 / 1;
+  }
+  .hero__photo img {
+    object-position: 50% 28%;
+  }
+
+  .section__head--with-controls {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .row__main {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 1rem 0.9rem 1.1rem;
+  }
+  .row__thumb {
+    width: 100%;
+  }
+  .row__chev {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .hero__photo-wrap,
+  .hero__photo-wrap:hover {
+    transform: none !important;
+  }
+  .row__main:hover,
+  .row__main[aria-expanded="true"] {
+    transform: none !important;
+  }
+}
