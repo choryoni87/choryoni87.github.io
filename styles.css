@@ -309,16 +309,29 @@ body.auth-locked {
 }
 
 .site-gate {
+  /* inset 단축은 구형 iOS·Safari에서 무시될 수 있어 top/left/right/bottom로도 지정 */
   position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
   z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  box-sizing: border-box;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: max(1.5rem, env(safe-area-inset-top, 0px))
+    max(1.5rem, env(safe-area-inset-right, 0px))
+    max(1.5rem, env(safe-area-inset-bottom, 0px))
+    max(1.5rem, env(safe-area-inset-left, 0px));
+  /* oklch 미지원 시에도 딤드가 남도록 */
+  background: rgba(32, 28, 24, 0.48);
   background: oklch(0.2 0.03 50 / 0.45);
-  backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
 
 .site-gate--hidden {
