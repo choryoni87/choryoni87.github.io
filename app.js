@@ -350,24 +350,29 @@ async function load() {
 }
 
 function initSiteGate() {
-  if (sessionStorage.getItem(SITE_AUTH_KEY) === "1") {
-    const gate = document.getElementById("site-gate");
-    if (gate) {
-      gate.classList.add("site-gate--hidden");
-      gate.setAttribute("aria-hidden", "true");
-    }
-    document.body.classList.remove("auth-locked");
-    load();
-    return;
-  }
-
   const gate = document.getElementById("site-gate");
   const form = document.getElementById("gate-form");
   const input = document.getElementById("gate-pin");
+  const button = form?.querySelector("button[type='submit']") ?? null;
   const err = gate?.querySelector("[data-gate-error]") ?? null;
   const panel = gate?.querySelector(".site-gate__panel") ?? null;
 
   if (!gate || !form || !input) {
+    load();
+    return;
+  }
+
+  let unlocked = false;
+  try {
+    if (sessionStorage.getItem(SITE_AUTH_KEY) === "1") unlocked = true;
+  } catch {
+    // 사파리 사설 모드 등은 무시(잠금만 안 풀린 상태로 동작)
+  }
+
+  if (unlocked) {
+    gate.classList.add("site-gate--hidden");
+    gate.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("auth-locked");
     load();
     return;
   }
@@ -410,12 +415,17 @@ function initSiteGate() {
   };
 
   const fail = () => {
+    const digits = gatePinDigitsOnly(input.value);
     if (err) {
       err.hidden = false;
-      err.textContent = "암호가 맞지 않아요. 4자리 숫자로 다시 입력해 주세요.";
+      err.textContent = `암호가 맞지 않아요. (감지된 숫자 ${digits.length}자리)`;
     }
     playDenyFeedback();
-    input.select();
+    try {
+      input.select();
+    } catch {
+      // ignore
+    }
   };
 
   const tryUnlock = () => {
@@ -425,17 +435,38 @@ function initSiteGate() {
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
+    e.stopPropagation();
     tryUnlock();
   });
 
-  /* 엔터: 일부 브라우저가 input에서 submit을 생략 → 직접 확인(제출은 한 번만) */
+  /* 버튼 클릭/탭: form submit이 막혀도 직접 잡음 */
+  if (button) {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      tryUnlock();
+    });
+  }
+
+  /* 엔터: 일부 브라우저가 input에서 submit을 생략 → 직접 확인 */
   input.addEventListener("keydown", (e) => {
     if (e.key !== "Enter" && e.key !== "NumpadEnter") return;
     e.preventDefault();
     tryUnlock();
   });
 
-  requestAnimationFrame(() => input.focus());
+  /* 4자리 다 채워지면 자동 시도(편의) */
+  input.addEventListener("input", () => {
+    const d = gatePinDigitsOnly(input.value);
+    if (d.length >= 4) tryUnlock();
+  });
+
+  requestAnimationFrame(() => {
+    try {
+      input.focus({ preventScroll: true });
+    } catch {
+      input.focus();
+    }
+  });
 }
 
 initSiteGate();
