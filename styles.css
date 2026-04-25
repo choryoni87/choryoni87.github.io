@@ -518,14 +518,6 @@ body.auth-locked {
   margin-bottom: 1.5rem;
 }
 
-.section__head--with-controls {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1.25rem 2rem;
-  align-items: end;
-  margin-bottom: 1rem;
-}
-
 .section__title {
   font-family: var(--font-display);
   font-weight: 700;
@@ -539,41 +531,6 @@ body.auth-locked {
   margin: 0;
   color: var(--text-dim);
   font-size: 0.95rem;
-}
-
-/* ---------- Controls ---------- */
-
-.controls {
-  width: 12rem;
-  max-width: min(12rem, 100%);
-  justify-self: end;
-}
-
-.controls input[type="search"] {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0.4rem 0.65rem;
-  min-height: 2.25rem;
-  border: 1px solid var(--search-border);
-  border-radius: var(--radius);
-  background: var(--search-surface);
-  color: var(--text-body);
-  font-size: 0.875rem;
-  line-height: 1.4;
-  text-align: center;
-  transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease), background 200ms var(--ease);
-}
-
-.controls input[type="search"]::placeholder {
-  color: var(--search-placeholder);
-  opacity: 0.92;
-}
-
-.controls input[type="search"]:focus {
-  outline: none;
-  border-color: oklch(0.78 0.04 50);
-  background: var(--bg-elev);
-  box-shadow: 0 0 0 2px oklch(0.72 0.06 50 / 0.22);
 }
 
 .filters {
@@ -981,17 +938,6 @@ body.auth-locked {
   }
   .hero__photo img {
     object-position: 50% 28%;
-  }
-
-  .section__head--with-controls {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .controls {
-    justify-self: start;
-    width: 100%;
-    max-width: 12rem;
   }
 
   .row__main {

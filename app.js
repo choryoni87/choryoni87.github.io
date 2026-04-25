@@ -20,7 +20,6 @@ function gatePinMatches(entered) {
 
 const state = {
   videos: [],
-  query: "",
   /** null=전체, 숫자=해당 연도(videos[].date의 연) */
   activeYear: null,
   /** true일 때 `videos[].category === "결혼식"`인 항목만(연도 필터와 배타) */
@@ -210,10 +209,7 @@ function renderAll(videos) {
     ? videos.filter((v) => isWeddingCategory(v))
     : videos.filter((v) => !isWeddingListOnly(v));
   const totalInScope = inScope.length;
-  const hasFilter =
-    state.query ||
-    state.activeYear != null ||
-    state.weddingOnly;
+  const hasFilter = state.activeYear != null || state.weddingOnly;
   const headBase = hasFilter
     ? `${total} / ${totalInScope} 편 표시`
     : `총 ${totalInScope} 편 (최신순)`;
@@ -223,12 +219,11 @@ function renderAll(videos) {
   renderPager(pager, pageCount);
 
   if (total === 0) {
-    if (state.weddingOnly && !state.query.trim()) {
+    if (state.weddingOnly) {
       empty.textContent =
         '웨딩으로 분류한 영상이 아직 없어요. videos.json에 "category": "결혼식"을 넣어 주세요.';
     } else {
-      empty.textContent =
-        "찾는 영상이 없어요. 다른 단어로 한 번 더 시도해 보세요.";
+      empty.textContent = "표시할 영상이 없어요.";
     }
   }
 }
@@ -332,7 +327,6 @@ function isWeddingListOnly(v) {
 }
 
 function applyFilters(videos) {
-  const q = state.query.trim().toLowerCase();
   const year = state.activeYear;
   return videos.filter((v) => {
     if (!state.weddingOnly && isWeddingListOnly(v)) return false;
@@ -342,17 +336,7 @@ function applyFilters(videos) {
       const y = yearFromDate(v.date);
       if (y !== year) return false;
     }
-    if (!q) return true;
-    const hay = [
-      v.displayTitle || "",
-      v.title || "",
-      v.dateDisplay || "",
-      v.description || "",
-      v.note || "",
-    ]
-      .join(" ")
-      .toLowerCase();
-    return hay.includes(q);
+    return true;
   });
 }
 
@@ -419,15 +403,6 @@ function filterPill(label, pressed, onSelect) {
   return b;
 }
 
-function bindSearch() {
-  const input = $("[data-search]");
-  input.addEventListener("input", (e) => {
-    state.query = e.target.value;
-    state.page = 1;
-    renderAll(state.videos);
-  });
-}
-
 function applySite(site) {
   if (!site) return;
   if (site.title) {
@@ -448,7 +423,6 @@ async function load() {
     state.videos = Array.isArray(data.videos) ? data.videos : [];
     renderYearFilters(state.videos);
     renderAll(state.videos);
-    bindSearch();
   } catch (err) {
     console.error(err);
     const list = $('[data-list="all"]');
