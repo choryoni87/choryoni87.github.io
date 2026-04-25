@@ -32,7 +32,7 @@ npm run add-video -- "https://youtu.be/영상ID"
 # 또는: npm run add-video -- "https://www.youtube.com/watch?v=영상ID"
 ```
 
-2. 스크립트가 **YouTube oEmbed**로 원문 제목을 받은 뒤, 앞에 붙은 **날짜·기간(예: `2024.06.30~07.06`)** 은 `videos.json`의 **`date`**(ISO)로만 넣고, 사이트 **목록·iframe 제목**은 **날짜를 뺀 본문**만 `title`·`displayTitle`에 넣습니다(중복 방지). **`<time class="row__date">`** 은 `date` → `2024.06.30` 형식으로만 표시됩니다.
+2. 스크립트가 **YouTube oEmbed**로 원문 제목을 받은 뒤, 앞에 **날짜·기간(예: `2024.06.30~07.06`)** 이 있으면 `date`는 **시작일** ISO(정렬·연도 필터·`<time datetime>`)로 넣고, **`dateDisplay`**(선택)에 **목록에만** `2024.06.30 ~ 07.06` 처럼 YouTube에 가깝게 보이게 둡니다. **제목**은 **날짜 뺀 본문**만 `title`·`displayTitle`에 둡니다(중복 방지). 기간이 없고 맨 앞이 `2024.09.15` 한 줄이면 `dateDisplay`는 `2024.09.15`만 넣을 수 있음.
 3. **짧은 설명** 한 줄은 본문 제목·키워드로 유추(날짜·원문제목 복붙 없음, 80자 이내, 휴리스틱 / 선택 시 Claude).
 4. `date`는 (1) `--date=2024-07-01`로 덮어쓰기, (2) **없으면 oEmbed 제목 앞에 있는 첫 날짜(예: 2024.06.30 → `2024-06-30`)**, (3) **그다음** 제목 안의 `YYYY.M.D` 탐지, (4) **그다음** **오늘(로컬)** 입니다.
 5. **이미 같은 `videoId`가 있으면** 종료하며, 덮어쓰려면:
@@ -60,12 +60,15 @@ npm run add-video -- "https://youtu.be/영상ID" --update
   "title": "유튜브 제목에서 날짜·기간 뺀 본문만(중복 막기)",
   "displayTitle": "짧은 표시용(없으면 title)",
   "description": "한두 줄 가족 메모.",
-  "date": "2026-09-29",
+  "date": "2024-06-30",
+  "dateDisplay": "2024.06.30 ~ 07.06",
   "note": ""
 }
 ```
 
-**날짜**는 `date`(ISO)에만 두고, `title` 앞에 `2024.06.30~` 같은 날짜는 넣지 않는 것이 좋습니다(목록 옆 `row__date`에만 표시). `add-video` 스크립트는 이렇게 맞춰 넣습니다.
+`dateDisplay`는 **선택**이며, 있으면 목록·`<time class="row__date">` **텍스트**가 `fmtDate(date)` 대신 이 문자열로 나갑니다(기간·라벨을 손으로 맞출 때). 없으면 `date`만 `2026.09.29` 형으로 표시.
+
+**날짜**는 `date`(ISO)에만 두고, `title` 앞에 `2024.06.30~` 같은 날짜는 넣지 않는 것이 좋습니다. `add-video`는 제목에 기간이 있으면 `date` + `dateDisplay`를 함께 맞춰 넣습니다.
 
 `displayTitle`을 비우면 `title`이 사용됩니다. 둘 다 없으면 `(제목 없음)`.
 

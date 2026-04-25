@@ -84,6 +84,10 @@
   --row-open-bg: oklch(0.992 0.016 50);
   --row-open-ring: oklch(0.78 0.06 38 / 0.2);
   --row-player-mix: oklch(0.955 0.016 78);
+  /* 검색창: 플레이스홀더·필에 쓰는 아주 연한 톤 */
+  --search-placeholder: oklch(0.66 0.016 60);
+  --search-surface: oklch(0.99 0.008 82);
+  --search-border: oklch(0.9 0.01 78);
 }
 
 *,
@@ -261,28 +265,143 @@ button {
   font-weight: 600;
 }
 
+.hero__text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  /* 제목/태그/힌트 ‘본문’ 폭(힌트는 이 안에서만 우측 정렬) */
+  --hero-copy-width: 32ch;
+}
+
 .hero__title {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(2rem, 4.5vw, 2.75rem);
   line-height: 1.15;
   letter-spacing: -0.01em;
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.5rem;
   color: var(--text-ink);
 }
 
 .hero__tagline {
   font-size: 1.0625rem;
-  margin: 0 0 1rem;
+  margin: 0 0 0.3rem;
   color: var(--text-lead);
-  max-width: 32ch;
+  max-width: var(--hero-copy-width);
 }
 
+/* 태그라인과 같은 폭 안에서만 오른쪽(열 전체 끝이 아님) */
 .hero__hint {
   font-size: 0.9rem;
   color: var(--text-caption);
   margin: 0;
-  max-width: 36ch;
+  line-height: 1.25;
+  text-align: right;
+  align-self: flex-start;
+  width: min(var(--hero-copy-width), 100%);
+  box-sizing: border-box;
+}
+
+/* ---------- 잠금(암호) ---------- */
+body.auth-locked {
+  overflow: hidden;
+}
+
+.site-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: oklch(0.2 0.03 50 / 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.site-gate--hidden {
+  display: none;
+}
+
+.site-gate__panel {
+  width: 100%;
+  max-width: 20rem;
+  padding: 1.75rem 1.5rem 1.6rem;
+  border-radius: var(--radius-lg);
+  background: var(--main-panel-a);
+  border: 1px solid var(--main-panel-border);
+  box-shadow:
+    0 1px 0 oklch(0.99 0.01 90 / 0.55) inset,
+    0 20px 48px -12px oklch(0.2 0.04 40 / 0.35);
+}
+
+.site-gate__title {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-ink);
+  text-align: center;
+}
+
+.site-gate__lead {
+  margin: 0 0 1.1rem;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.site-gate__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.site-gate__input {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  letter-spacing: 0.12em;
+  text-align: center;
+  color: var(--text-ink);
+  border: 1px solid var(--search-border);
+  border-radius: var(--radius);
+  background: var(--search-surface);
+}
+
+.site-gate__input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.site-gate__btn {
+  appearance: none;
+  width: 100%;
+  padding: 0.55rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent-fg);
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 180ms var(--ease);
+}
+
+.site-gate__btn:hover {
+  background: var(--accent-press);
+}
+
+.site-gate__err {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  text-align: center;
+  color: oklch(0.5 0.16 20);
 }
 
 /* ---------- Sections ---------- */
@@ -329,7 +448,7 @@ button {
 
 .section__head--with-controls {
   display: grid;
-  grid-template-columns: 1fr minmax(220px, 320px);
+  grid-template-columns: 1fr auto;
   gap: 1.25rem 2rem;
   align-items: end;
   margin-bottom: 1rem;
@@ -352,25 +471,37 @@ button {
 
 /* ---------- Controls ---------- */
 
+.controls {
+  width: 12rem;
+  max-width: min(12rem, 100%);
+  justify-self: end;
+}
+
 .controls input[type="search"] {
   width: 100%;
-  padding: 0.7rem 0.9rem;
-  border: 1px solid var(--border-strong);
+  box-sizing: border-box;
+  padding: 0.4rem 0.65rem;
+  min-height: 2.25rem;
+  border: 1px solid var(--search-border);
   border-radius: var(--radius);
-  background: var(--bg-elev);
+  background: var(--search-surface);
   color: var(--text-body);
-  font: inherit;
-  transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  text-align: center;
+  transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease), background 200ms var(--ease);
 }
 
 .controls input[type="search"]::placeholder {
-  color: var(--text-dim);
+  color: var(--search-placeholder);
+  opacity: 0.92;
 }
 
 .controls input[type="search"]:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--ring);
+  border-color: oklch(0.78 0.04 50);
+  background: var(--bg-elev);
+  box-shadow: 0 0 0 2px oklch(0.72 0.06 50 / 0.22);
 }
 
 .filters {
@@ -402,6 +533,63 @@ button {
   border-color: var(--accent);
   background: oklch(0.99 0.03 40);
   font-weight: 600;
+}
+
+/* 웨딩 필터: 로즈·캔버스 톤(다른 연도 pill과 구분) */
+.filter-pill[data-filter="wedding"] {
+  position: relative;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  border: 1px solid oklch(0.78 0.07 12);
+  background: linear-gradient(
+    155deg,
+    oklch(0.995 0.012 50) 0%,
+    oklch(0.97 0.04 20) 45%,
+    oklch(0.94 0.07 12) 100%
+  );
+  color: oklch(0.42 0.09 18);
+  box-shadow:
+    0 1px 0 oklch(0.99 0.01 25 / 0.85) inset,
+    0 2px 10px -3px oklch(0.45 0.12 8 / 0.12);
+  transition:
+    color 200ms var(--ease),
+    border-color 200ms var(--ease),
+    background 200ms var(--ease),
+    box-shadow 200ms var(--ease),
+    transform 200ms var(--ease);
+}
+
+.filter-pill[data-filter="wedding"]:hover {
+  color: oklch(0.3 0.1 12);
+  border-color: oklch(0.7 0.1 8);
+  box-shadow:
+    0 1px 0 oklch(0.99 0.01 25 / 0.85) inset,
+    0 4px 14px -4px oklch(0.42 0.14 8 / 0.2);
+}
+
+.filter-pill[data-filter="wedding"][aria-pressed="true"] {
+  color: oklch(0.32 0.14 12);
+  font-weight: 600;
+  border-color: oklch(0.62 0.14 5);
+  background: linear-gradient(
+    160deg,
+    oklch(0.99 0.04 32) 0%,
+    oklch(0.94 0.1 20) 48%,
+    oklch(0.9 0.12 8) 100%
+  );
+  box-shadow:
+    0 1px 0 oklch(0.99 0.02 30 / 0.9) inset,
+    0 0 0 1.5px oklch(0.72 0.14 8 / 0.35),
+    0 3px 12px -4px oklch(0.4 0.12 6 / 0.18);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .filter-pill[data-filter="wedding"]:hover {
+    transform: translateY(-1px);
+  }
+  .filter-pill[data-filter="wedding"][aria-pressed="true"] {
+    transform: none;
+  }
 }
 
 /* ---------- Rows (list) ---------- */
@@ -517,8 +705,11 @@ button {
 .row__meta {
   display: block;
   font-size: 0.825rem;
+  line-height: 1.4;
   color: var(--text-dim);
   font-variant-numeric: tabular-nums;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .row__date {
@@ -639,6 +830,12 @@ button {
     gap: 1rem;
   }
 
+  .controls {
+    justify-self: start;
+    width: 100%;
+    max-width: 12rem;
+  }
+
   .row__main {
     grid-template-columns: 1fr;
     gap: 0.75rem;
@@ -656,6 +853,9 @@ button {
   *, *::before, *::after {
     animation: none !important;
     transition: none !important;
+  }
+  .filter-pill[data-filter="wedding"]:hover {
+    transform: none !important;
   }
   .hero__photo-wrap,
   .hero__photo-wrap:hover {

@@ -1,10 +1,15 @@
 const $ = (sel, root = document) => root.querySelector(sel);
 
+const SITE_AUTH_KEY = "familySiteAuthV1";
+const SITE_AUTH_PIN = "0629";
+
 const state = {
   videos: [],
   query: "",
   /** null=전체, 숫자=해당 연도(videos[].date의 연) */
   activeYear: null,
+  /** true일 때 `videos[].category === "결혼식"`인 항목만(연도 필터와 배타) */
+  weddingOnly: false,
 };
 
 function fmtDate(iso) {
@@ -17,13 +22,35 @@ function fmtDate(iso) {
   return `${y}.${m}.${day}`;
 }
 
+/** oEmbed에서 파싱한 기간(예: 2024.06.30 ~ 07.06). 없으면 `date`만 포맷 */
+function fmtDateOrRangeForRow(video) {
+  const custom = video.dateDisplay;
+  if (custom && String(custom).trim()) return String(custom).trim();
+  return fmtDate(video.date);
+}
+
+/** row__desc: JSON·자동생성 모두, 맨끝 마침표는 표시하지 않음 */
+function stripTrailingDescriptionPeriodForUi(s) {
+  return String(s || "")
+    .trim()
+    .replace(/[.．。]+$/u, "")
+    .trim();
+}
+
 /**
- * 유튜브식 제목(앞에 2024.06.30~… 등)이 섞인 경우, 제목만 보이게 — 날짜는 `date` + `.row__date`만 사용.
+ * 유튜브식 제목(앞에 2024.06.30~… 등)이 섞인 경우, 제목만 보이게(날짜는 `date`·`dateDisplay`).
  * @param {string} s
  */
 function stripLeadingDateFromTitleForUi(s) {
   if (!s) return s;
   const t = String(s)
+    .replace(/^\d{4}\d{2}\d{2}~\d{4}\d{2}\d{2}\s*/u, "")
+    .replace(/^\d{4}\d{2}\d{2}~\d{2}\d{2}\s*/u, "")
+    .replace(/^\d{4}년\s*\d{1,2}월\s*\d{1,2}일\s*/u, "")
+    .replace(
+      /^\d{4}[.\-\/]\d{1,2}[.\-\/]\d{1,2}\.(?=[^\d.]|$)/u,
+      ""
+    )
     .replace(
       /^\d{4}[.\-\/]\d{1,2}[.\-\/]\d{1,2}\s*~\s*[\d.~\/\-,\s]+/i,
       ""
@@ -101,9 +128,11 @@ function buildRow(video) {
   $(".row__thumb", li).appendChild(playBadge);
 
   title.textContent = display;
-  date.textContent = fmtDate(video.date);
+  date.textContent = fmtDateOrRangeForRow(video);
   date.dateTime = video.date || "";
-  desc.textContent = video.description || "";
+  desc.textContent = stripTrailingDescriptionPeriodForUi(
+    video.description || ""
+  );
 
   btn.addEventListener("click", () => {
     const expanded = btn.getAttribute("aria-expanded") === "true";
@@ -144,23 +173,59 @@ function renderAll(videos) {
     empty.hidden = true;
     filtered.sort(byDateDesc).forEach((v) => list.appendChild(buildRow(v)));
   }
-  const total = videos.length;
-  count.textContent =
-    state.query || state.activeYear != null
-      ? `${filtered.length} / ${total} 편 표시`
-      : `총 ${total} 편 (최신순)`;
+  const inScope = state.weddingOnly
+    ? videos.filter((v) => isWeddingCategory(v))
+    : videos.filter((v) => !isWeddingListOnly(v));
+  const total = inScope.length;
+  const hasFilter =
+    state.query ||
+    state.activeYear != null ||
+    state.weddingOnly;
+  count.textContent = hasFilter
+    ? `${filtered.length} / ${total} 편 표시`
+    : `총 ${total} 편 (최신순)`;
+
+  if (filtered.length === 0) {
+    if (state.weddingOnly && !state.query.trim()) {
+      empty.textContent =
+        '웨딩으로 분류한 영상이 아직 없어요. videos.json에 "category": "결혼식"을 넣어 주세요.';
+    } else {
+      empty.textContent =
+        "찾는 영상이 없어요. 다른 단어로 한 번 더 시도해 보세요.";
+    }
+  }
+}
+
+/** @param {Record<string, unknown>} v */
+function isWeddingCategory(v) {
+  const c = v.category;
+  return c === "결혼식" || c === "wedding";
+}
+
+/** `onlyWedding: true` — 결혼식 필터에서만 보임(전체·연도·검색의 일반 목록 제외) */
+function isWeddingListOnly(v) {
+  return v.onlyWedding === true;
 }
 
 function applyFilters(videos) {
   const q = state.query.trim().toLowerCase();
   const year = state.activeYear;
   return videos.filter((v) => {
-    if (year != null) {
+    if (!state.weddingOnly && isWeddingListOnly(v)) return false;
+    if (state.weddingOnly) {
+      if (!isWeddingCategory(v)) return false;
+    } else if (year != null) {
       const y = yearFromDate(v.date);
       if (y !== year) return false;
     }
     if (!q) return true;
-    const hay = [v.displayTitle || "", v.title || "", v.description || "", v.note || ""]
+    const hay = [
+      v.displayTitle || "",
+      v.title || "",
+      v.dateDisplay || "",
+      v.description || "",
+      v.note || "",
+    ]
       .join(" ")
       .toLowerCase();
     return hay.includes(q);
@@ -175,6 +240,7 @@ function renderYearFilters(videos) {
   const wrap = $("[data-filters]");
   const years = new Set();
   videos.forEach((v) => {
+    if (isWeddingListOnly(v)) return;
     const y = yearFromDate(v.date);
     if (y != null) years.add(y);
   });
@@ -183,27 +249,45 @@ function renderYearFilters(videos) {
     state.activeYear = null;
   }
   wrap.replaceChildren();
-  if (sorted.length === 0) return;
 
-  wrap.appendChild(makeYearButton("전체", null, state.activeYear == null));
+  const allPressed = state.activeYear == null && !state.weddingOnly;
+  wrap.appendChild(filterPill("전체", allPressed, () => {
+    state.activeYear = null;
+    state.weddingOnly = false;
+  }));
+
   sorted.forEach((y) => {
+    const pressed = !state.weddingOnly && state.activeYear === y;
     wrap.appendChild(
-      makeYearButton(String(y), y, state.activeYear === y)
+      filterPill(String(y), pressed, () => {
+        state.activeYear = y;
+        state.weddingOnly = false;
+      })
     );
   });
+
+  wrap.appendChild(
+    filterPill("웨딩", state.weddingOnly, () => {
+      state.activeYear = null;
+      state.weddingOnly = true;
+    })
+  );
 }
 
-function makeYearButton(label, value, pressed) {
+/**
+ * @param {string} label
+ * @param {boolean} pressed
+ * @param {() => void} onSelect
+ */
+function filterPill(label, pressed, onSelect) {
   const b = document.createElement("button");
   b.className = "filter-pill";
   b.type = "button";
   b.textContent = label;
   b.setAttribute("aria-pressed", pressed ? "true" : "false");
-  if (value != null) {
-    b.setAttribute("data-year", String(value));
-  }
+  if (label === "웨딩") b.setAttribute("data-filter", "wedding");
   b.addEventListener("click", () => {
-    state.activeYear = value;
+    onSelect();
     renderYearFilters(state.videos);
     renderAll(state.videos);
   });
@@ -250,4 +334,54 @@ async function load() {
   }
 }
 
-load();
+function initSiteGate() {
+  if (sessionStorage.getItem(SITE_AUTH_KEY) === "1") {
+    const gate = document.getElementById("site-gate");
+    if (gate) {
+      gate.classList.add("site-gate--hidden");
+      gate.setAttribute("aria-hidden", "true");
+    }
+    document.body.classList.remove("auth-locked");
+    load();
+    return;
+  }
+
+  const gate = document.getElementById("site-gate");
+  const form = document.querySelector("[data-gate-form]");
+  const input = document.querySelector("[data-gate-input]");
+  const err = document.querySelector("[data-gate-error]");
+
+  if (!gate || !form || !input) {
+    load();
+    return;
+  }
+
+  document.body.classList.add("auth-locked");
+
+  const ok = () => {
+    sessionStorage.setItem(SITE_AUTH_KEY, "1");
+    gate.classList.add("site-gate--hidden");
+    gate.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("auth-locked");
+    err.hidden = true;
+    err.textContent = "";
+    load();
+  };
+
+  const fail = () => {
+    err.hidden = false;
+    err.textContent = "암호가 맞지 않아요.";
+    input.select();
+  };
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const v = String(input.value || "").trim();
+    if (v === SITE_AUTH_PIN) ok();
+    else fail();
+  });
+
+  requestAnimationFrame(() => input.focus());
+}
+
+initSiteGate();

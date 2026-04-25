@@ -12,6 +12,36 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <div
+      id="site-gate"
+      class="site-gate"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="gate-title"
+    >
+      <div class="site-gate__panel">
+        <h2 id="gate-title" class="site-gate__title">가족 전용</h2>
+        <p class="site-gate__lead">암호를 입력해 주세요.</p>
+        <form class="site-gate__form" data-gate-form>
+          <label for="gate-pin" class="visually-hidden">암호 (숫자)</label>
+          <input
+            id="gate-pin"
+            class="site-gate__input"
+            type="password"
+            name="pin"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            maxlength="8"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            data-gate-input
+          />
+          <button type="submit" class="site-gate__btn">들어가기</button>
+        </form>
+        <p class="site-gate__err" data-gate-error hidden role="alert"></p>
+      </div>
+    </div>
     <header class="hero">
       <div class="hero__inner">
         <figure class="hero__photo">
@@ -34,11 +64,9 @@
           <p class="hero__eyebrow">가족 아카이브</p>
           <h1 class="hero__title" data-site-title>우리 가족 영상</h1>
           <p class="hero__tagline" data-site-tagline>
-            올라온 순서대로, 천천히 보세요.
+            우리 가족의 추억이 머무는 영상, 늘 함께하길 바라요.
           </p>
-          <p class="hero__hint">
-            제목·메모는 검색으로, 연도는 아래 버튼으로 골라요.
-          </p>
+          <p class="hero__hint">사랑하는 유미, 도유 ❤️</p>
         </div>
       </div>
     </header>
@@ -51,24 +79,24 @@
             <p class="section__sub" data-count></p>
           </div>
           <form class="controls" role="search" onsubmit="return false;">
-            <label class="visually-hidden" for="search">제목·메모로 찾기</label>
+            <label class="visually-hidden" for="search">제목 검색</label>
             <input
               id="search"
               type="search"
-              placeholder="제목이나 짧은 메모로 찾기"
+              placeholder="제목 검색"
               autocomplete="off"
               data-search
             />
           </form>
         </div>
-        <div class="filters" data-filters aria-label="연도"></div>
+        <div class="filters" data-filters aria-label="연도·분류"></div>
         <ul class="rows" data-list="all" aria-live="polite"></ul>
         <p class="empty" data-empty hidden>찾는 영상이 없어요. 다른 단어로 한 번 더 시도해 보세요.</p>
       </section>
     </main>
 
     <footer class="foot">
-      <p>이 사이트는 가족용입니다. 링크 공유는 가족끼리만.</p>
+      <p>이 사이트는 가족용입니다. 링크 공유는 가족끼리만 ❤️</p>
     </footer>
 
     <template id="row-template">

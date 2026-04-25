@@ -7,6 +7,7 @@
   },
   "scripts": {
     "add-video": "node scripts/add-youtube.mjs",
-    "videos:add": "node scripts/add-youtube.mjs"
+    "videos:add": "node scripts/add-youtube.mjs",
+    "refresh-descriptions": "node scripts/add-youtube.mjs --refresh-all-descriptions --no-llm"
   }
 }
