@@ -9,7 +9,11 @@
 ├─ index.html        # 마크업
 ├─ styles.css        # 따뜻한 종이 톤(OKLCH) 스타일
 ├─ app.js            # videos.json 로드, 연도 필터·검색, 인라인 재생
-├─ videos.json       # 영상 목록(여기만 고치면 됨)
+├─ videos.json       # 영상 목록(스크립트 또는 수동 편집)
+├─ scripts/
+│  └─ add-youtube.mjs # 링크만 넣으면 제목(oEmbed)+설명 자동 → videos.json
+├─ package.json      # npm run add-video
+├─ .env.example      # (선택) Claude API로 설명 문장 생성
 ├─ assets/
 │  └─ hero.jpg       # 헤더 가족 사진(최적화본)
 ├─ PRODUCT.md        # 톤·사용자·원칙
@@ -17,29 +21,55 @@
 └─ README.md
 ```
 
-## 영상 추가하는 방법
+## 영상 추가하는 방법(권장: 자동)
+
+[Node 18+](https://nodejs.org/)가 있으면 **유튜브 링크만** 넣으면 됩니다.
+
+1. 터미널에서 이 폴더로 이동한 뒤:
+
+```bash
+npm run add-video -- "https://youtu.be/영상ID"
+# 또는: npm run add-video -- "https://www.youtube.com/watch?v=영상ID"
+```
+
+2. 스크립트가 **YouTube oEmbed**로 원문 제목을 받은 뒤, 앞에 붙은 **날짜·기간(예: `2024.06.30~07.06`)** 은 `videos.json`의 **`date`**(ISO)로만 넣고, 사이트 **목록·iframe 제목**은 **날짜를 뺀 본문**만 `title`·`displayTitle`에 넣습니다(중복 방지). **`<time class="row__date">`** 은 `date` → `2024.06.30` 형식으로만 표시됩니다.
+3. **짧은 설명** 한 줄은 본문 제목·키워드로 유추(날짜·원문제목 복붙 없음, 80자 이내, 휴리스틱 / 선택 시 Claude).
+4. `date`는 (1) `--date=2024-07-01`로 덮어쓰기, (2) **없으면 oEmbed 제목 앞에 있는 첫 날짜(예: 2024.06.30 → `2024-06-30`)**, (3) **그다음** 제목 안의 `YYYY.M.D` 탐지, (4) **그다음** **오늘(로컬)** 입니다.
+5. **이미 같은 `videoId`가 있으면** 종료하며, 덮어쓰려면:
+
+```bash
+npm run add-video -- "https://youtu.be/영상ID" --update
+```
+
+6. (선택) **더 자연스러운 설명**을 Claude API에 맡기려면, 프로젝트 루트에 `.env`를 두고(`.env.example` 참고) `ANTHROPIC_API_KEY`를 넣습니다. 키가 없으면 **키워드 기반 휴리스틱**만 씁니다. API 없이 쓰려면 그대로 두면 됩니다.
+
+7. (선택) `npm run add-video -- "URL" --no-llm` — API 키가 있어도 휴리스틱만 사용합니다.
+
+> 비공개·삭제·연령제한 등으로 oEmbed에 안 잡히면 제목을 가져올 수 없습니다. 그때는 **수동**으로 `videos.json`을 편집하세요.
+
+## 영상을 직접 `videos.json`에 쓰는 경우
 
 1. 유튜브에 영상 업로드 후 **공개 범위**를 정합니다(추천: **일부공개**).
-2. 주소창에서 `videoId`를 가져옵니다.
-   - 예) `https://www.youtube.com/watch?v=dQw4w9WgXcQ` → `dQw4w9WgXcQ`
-3. `videos.json`의 `videos` 배열 **맨 위**에 한 항목을 추가합니다.
+2. `videoId`를 복사합니다. 예) `https://www.youtube.com/watch?v=dQw4w9WgXcQ` → `dQw4w9WgXcQ`
+3. `videos` 배열 **맨 위**에 항목을 추가합니다.
 
 ```json
 {
   "id": "2026-09-29-family-dinner",
   "videoId": "여기에_유튜브_ID",
-  "displayTitle": "사이트에 보일 짧은 제목",
+  "title": "유튜브 제목에서 날짜·기간 뺀 본문만(중복 막기)",
+  "displayTitle": "짧은 표시용(없으면 title)",
   "description": "한두 줄 가족 메모.",
   "date": "2026-09-29",
   "note": ""
 }
 ```
 
+**날짜**는 `date`(ISO)에만 두고, `title` 앞에 `2024.06.30~` 같은 날짜는 넣지 않는 것이 좋습니다(목록 옆 `row__date`에만 표시). `add-video` 스크립트는 이렇게 맞춰 넣습니다.
+
 `displayTitle`을 비우면 `title`이 사용됩니다. 둘 다 없으면 `(제목 없음)`.
 
 **연도 필터**는 각 항목의 `date`(ISO 날짜, 예: `2026-09-29`)에서 **연도만** 읽어 자동으로 버튼을 만듭니다. 상단의 `2026`, `2025` 같은 버튼으로 그 해 영상만 보여 줍니다. **태그는 사용하지 않습니다.**
-
-> 자동화 옵션: 나중에 “링크만 적으면 빌드 시 oEmbed로 제목 자동 채움”을 붙일 수 있습니다(스크립트 추가). 가족이 직접 적는 짧은 메모는 항상 수동입니다.
 
 ## 로컬에서 미리 보기
 

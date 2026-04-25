@@ -17,6 +17,31 @@ function fmtDate(iso) {
   return `${y}.${m}.${day}`;
 }
 
+/**
+ * 유튜브식 제목(앞에 2024.06.30~… 등)이 섞인 경우, 제목만 보이게 — 날짜는 `date` + `.row__date`만 사용.
+ * @param {string} s
+ */
+function stripLeadingDateFromTitleForUi(s) {
+  if (!s) return s;
+  const t = String(s)
+    .replace(
+      /^\d{4}[.\-\/]\d{1,2}[.\-\/]\d{1,2}\s*~\s*[\d.~\/\-,\s]+/i,
+      ""
+    )
+    .replace(
+      /^\d{4}[.\-\/]\d{1,2}[.\-\/]\d{1,2}\s*[-–~]\s*\d{4}[.\-\/]\d{1,2}[.\-\/]\d{1,2}/i,
+      ""
+    )
+    .replace(/^\d{4}[.\-\/]?\d{1,2}[.\-\/]?\d{1,2}\s*~\s*[\d.]+\s*/i, "")
+    .replace(
+      /^\d{4}\s*년\s*\d{1,2}\s*월[\s~\-–—]*\d{0,2}\s*일?\s*/i,
+      ""
+    )
+    .replace(/^\d{4}[.\-\/]\d{1,2}[.\-\/]\d{1,2}\s+/, "")
+    .trim();
+  return t || s;
+}
+
 /** @param {string|undefined} iso */
 function yearFromDate(iso) {
   if (!iso) return null;
@@ -56,7 +81,9 @@ function buildRow(video) {
   const player = $(".row__player", li);
   const playerInner = $(".row__player-inner", li);
 
-  const display = video.displayTitle || video.title || "(제목 없음)";
+  const display = stripLeadingDateFromTitleForUi(
+    video.displayTitle || video.title || "(제목 없음)"
+  );
 
   img.src = thumbUrl(video.videoId);
   img.alt = `${display} 썸네일`;
