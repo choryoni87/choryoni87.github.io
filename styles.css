@@ -372,6 +372,7 @@ body.auth-locked {
   gap: 0.65rem;
 }
 
+/* type=text + 점으로 가림(모바일에서 password+submit 이슈 회피) */
 .site-gate__input {
   width: 100%;
   padding: 0.6rem 0.85rem;
@@ -383,6 +384,8 @@ body.auth-locked {
   border: 1px solid var(--search-border);
   border-radius: var(--radius);
   background: var(--search-surface);
+  -webkit-text-security: disc;
+  text-security: disc;
 }
 
 .site-gate__input:focus {

@@ -1,24 +1,21 @@
 const $ = (sel, root = document) => root.querySelector(sel);
 
 const SITE_AUTH_KEY = "familySiteAuthV1";
+// 오직 0-9 네 자리(앞자리 0 포함)
 const SITE_AUTH_PIN = "0629";
 
-/** 전각 숫자·공백 제거, NFC 정규화(모바일 키보드·붙여넣기 대비) */
-function normalizeGatePin(raw) {
-  let s = String(raw ?? "")
-    .normalize("NFC")
-    .trim();
-  s = s.replace(/[\s\u00a0\u200b\uFEFF]+/g, "");
+/** 전각→반각 뒤 ASCII 숫자만 남김(0123456789) */
+function gatePinDigitsOnly(raw) {
+  let s = String(raw ?? "").normalize("NFC");
   s = s.replace(/[\uFF10-\uFF19]/g, (ch) =>
     String.fromCharCode(ch.charCodeAt(0) - 0xff10 + 0x30)
   );
-  return s;
+  return s.replace(/\D/g, "");
 }
 
-/** 정확히 4자리(0629)만 통과, 전각·공백 정규화 후 비교 */
 function gatePinMatches(entered) {
-  const n = normalizeGatePin(entered);
-  return n.length === 4 && /^\d{4}$/.test(n) && n === SITE_AUTH_PIN;
+  const d = gatePinDigitsOnly(entered);
+  return d.length === 4 && d === SITE_AUTH_PIN;
 }
 
 const state = {
@@ -365,9 +362,9 @@ function initSiteGate() {
   }
 
   const gate = document.getElementById("site-gate");
-  const form = document.querySelector("[data-gate-form]");
-  const input = document.querySelector("[data-gate-input]");
-  const err = document.querySelector("[data-gate-error]");
+  const form = document.getElementById("gate-form");
+  const input = document.getElementById("gate-pin");
+  const err = gate?.querySelector("[data-gate-error]") ?? null;
 
   if (!gate || !form || !input) {
     load();
@@ -377,25 +374,44 @@ function initSiteGate() {
   document.body.classList.add("auth-locked");
 
   const ok = () => {
-    sessionStorage.setItem(SITE_AUTH_KEY, "1");
+    try {
+      sessionStorage.setItem(SITE_AUTH_KEY, "1");
+    } catch {
+      // 사파리 사설 모드 등
+    }
     gate.classList.add("site-gate--hidden");
     gate.setAttribute("aria-hidden", "true");
     document.body.classList.remove("auth-locked");
-    err.hidden = true;
-    err.textContent = "";
+    if (err) {
+      err.hidden = true;
+      err.textContent = "";
+    }
     load();
   };
 
   const fail = () => {
-    err.hidden = false;
-    err.textContent = "암호가 맞지 않아요.";
+    if (err) {
+      err.hidden = false;
+      err.textContent = "암호가 맞지 않아요. 4자리 숫자로 다시 입력해 주세요.";
+    }
     input.select();
+  };
+
+  const tryUnlock = () => {
+    if (gatePinMatches(input.value)) ok();
+    else fail();
   };
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    if (gatePinMatches(input.value)) ok();
-    else fail();
+    tryUnlock();
+  });
+
+  /* 엔터: 일부 브라우저가 input에서 submit을 생략 → 직접 확인(제출은 한 번만) */
+  input.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== "NumpadEnter") return;
+    e.preventDefault();
+    tryUnlock();
   });
 
   requestAnimationFrame(() => input.focus());
