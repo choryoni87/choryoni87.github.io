@@ -25,6 +25,10 @@ const state = {
   activeYear: null,
   /** true일 때 `videos[].category === "결혼식"`인 항목만(연도 필터와 배타) */
   weddingOnly: false,
+  /** 페이지네이션 — 1-base 현재 페이지 */
+  page: 1,
+  /** 한 페이지에 표시할 영상 수(전체·연도·웨딩 모두 동일) */
+  pageSize: 5,
 };
 
 function fmtDate(iso) {
@@ -180,27 +184,45 @@ function renderAll(videos) {
   const list = $('[data-list="all"]');
   const empty = $("[data-empty]");
   const count = $("[data-count]");
-  const filtered = applyFilters(videos);
+  const pager = $("[data-pager]");
+
+  const filtered = applyFilters(videos).sort(byDateDesc);
+  const total = filtered.length;
+  const pageSize = state.pageSize;
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
+
+  // 필터/검색 결과가 줄어 현재 페이지가 범위를 벗어나면 보정
+  if (state.page > pageCount) state.page = pageCount;
+  if (state.page < 1) state.page = 1;
+
+  const start = (state.page - 1) * pageSize;
+  const pageItems = filtered.slice(start, start + pageSize);
+
   list.replaceChildren();
-  if (filtered.length === 0) {
+  if (total === 0) {
     empty.hidden = false;
   } else {
     empty.hidden = true;
-    filtered.sort(byDateDesc).forEach((v) => list.appendChild(buildRow(v)));
+    pageItems.forEach((v) => list.appendChild(buildRow(v)));
   }
+
   const inScope = state.weddingOnly
     ? videos.filter((v) => isWeddingCategory(v))
     : videos.filter((v) => !isWeddingListOnly(v));
-  const total = inScope.length;
+  const totalInScope = inScope.length;
   const hasFilter =
     state.query ||
     state.activeYear != null ||
     state.weddingOnly;
-  count.textContent = hasFilter
-    ? `${filtered.length} / ${total} 편 표시`
-    : `총 ${total} 편 (최신순)`;
+  const headBase = hasFilter
+    ? `${total} / ${totalInScope} 편 표시`
+    : `총 ${totalInScope} 편 (최신순)`;
+  count.textContent =
+    pageCount > 1 ? `${headBase} · ${state.page}/${pageCount} 페이지` : headBase;
 
-  if (filtered.length === 0) {
+  renderPager(pager, pageCount);
+
+  if (total === 0) {
     if (state.weddingOnly && !state.query.trim()) {
       empty.textContent =
         '웨딩으로 분류한 영상이 아직 없어요. videos.json에 "category": "결혼식"을 넣어 주세요.';
@@ -209,6 +231,93 @@ function renderAll(videos) {
         "찾는 영상이 없어요. 다른 단어로 한 번 더 시도해 보세요.";
     }
   }
+}
+
+/**
+ * 페이지 버튼 렌더 — ‹ 1 2 … 5 ›
+ * @param {HTMLElement | null} pager
+ * @param {number} pageCount
+ */
+function renderPager(pager, pageCount) {
+  if (!pager) return;
+  pager.replaceChildren();
+  if (pageCount <= 1) {
+    pager.hidden = true;
+    return;
+  }
+  pager.hidden = false;
+
+  const goto = (page) => {
+    if (page < 1 || page > pageCount || page === state.page) return;
+    state.page = page;
+    renderAll(state.videos);
+    // 페이지 이동 후 목록 상단으로 부드럽게 스크롤
+    const list = $('[data-list="all"]');
+    if (list) {
+      const top = list.getBoundingClientRect().top + window.scrollY - 24;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  };
+
+  const mkBtn = (label, page, opts = {}) => {
+    const b = document.createElement("button");
+    b.className = "pager__btn";
+    if (opts.current) b.classList.add("pager__btn--current");
+    if (opts.nav) b.classList.add("pager__btn--nav");
+    b.type = "button";
+    b.textContent = label;
+    if (opts.current) b.setAttribute("aria-current", "page");
+    if (opts.disabled) b.disabled = true;
+    if (opts.ariaLabel) b.setAttribute("aria-label", opts.ariaLabel);
+    b.addEventListener("click", () => goto(page));
+    return b;
+  };
+
+  const mkEllipsis = () => {
+    const span = document.createElement("span");
+    span.className = "pager__ellipsis";
+    span.setAttribute("aria-hidden", "true");
+    span.textContent = "…";
+    return span;
+  };
+
+  // 페이지가 7개 이하면 모두, 그보다 많으면 1 … (현재±1) … 마지막
+  const numbers = [];
+  if (pageCount <= 7) {
+    for (let i = 1; i <= pageCount; i++) numbers.push(i);
+  } else {
+    const set = new Set([1, pageCount, state.page, state.page - 1, state.page + 1]);
+    const arr = [...set].filter((n) => n >= 1 && n <= pageCount).sort((a, b) => a - b);
+    arr.forEach((n, i) => {
+      if (i > 0 && n - arr[i - 1] > 1) numbers.push("…");
+      numbers.push(n);
+    });
+  }
+
+  pager.appendChild(
+    mkBtn("‹", state.page - 1, {
+      nav: true,
+      disabled: state.page === 1,
+      ariaLabel: "이전 페이지",
+    })
+  );
+  numbers.forEach((n) => {
+    if (n === "…") pager.appendChild(mkEllipsis());
+    else
+      pager.appendChild(
+        mkBtn(String(n), n, {
+          current: state.page === n,
+          ariaLabel: `${n} 페이지`,
+        })
+      );
+  });
+  pager.appendChild(
+    mkBtn("›", state.page + 1, {
+      nav: true,
+      disabled: state.page === pageCount,
+      ariaLabel: "다음 페이지",
+    })
+  );
 }
 
 /** @param {Record<string, unknown>} v */
@@ -303,6 +412,7 @@ function filterPill(label, pressed, onSelect) {
   if (label === "웨딩") b.setAttribute("data-filter", "wedding");
   b.addEventListener("click", () => {
     onSelect();
+    state.page = 1;
     renderYearFilters(state.videos);
     renderAll(state.videos);
   });
@@ -313,6 +423,7 @@ function bindSearch() {
   const input = $("[data-search]");
   input.addEventListener("input", (e) => {
     state.query = e.target.value;
+    state.page = 1;
     renderAll(state.videos);
   });
 }
