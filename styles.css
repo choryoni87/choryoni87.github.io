@@ -334,8 +334,9 @@ body.auth-locked {
   backdrop-filter: blur(6px);
 }
 
-.site-gate--hidden {
-  display: none;
+.site-gate--hidden,
+#site-gate.site-gate--hidden {
+  display: none !important;
 }
 
 .site-gate__panel {

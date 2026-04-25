@@ -372,6 +372,7 @@ function initSiteGate() {
   if (unlocked) {
     gate.classList.add("site-gate--hidden");
     gate.setAttribute("aria-hidden", "true");
+    gate.style.display = "none";
     document.body.classList.remove("auth-locked");
     load();
     return;
@@ -387,6 +388,8 @@ function initSiteGate() {
     }
     gate.classList.add("site-gate--hidden");
     gate.setAttribute("aria-hidden", "true");
+    // 외부/인라인 CSS의 우선순위 차이로 숨김 클래스가 무시되는 경우를 대비한 보강
+    gate.style.display = "none";
     document.body.classList.remove("auth-locked");
     if (err) {
       err.hidden = true;
@@ -415,10 +418,19 @@ function initSiteGate() {
   };
 
   const fail = () => {
-    const digits = gatePinDigitsOnly(input.value);
+    const raw = String(input.value ?? "");
+    const digits = gatePinDigitsOnly(raw);
     if (err) {
       err.hidden = false;
-      err.textContent = `암호가 맞지 않아요. (감지된 숫자 ${digits.length}자리)`;
+      // 디버그가 필요한 동안에는 raw 길이 + 숫자 길이를 함께 보여줌
+      const debug =
+        location.search.includes("debug") ||
+        location.hash.includes("debug");
+      err.textContent = debug
+        ? `틀려요. (raw ${raw.length}자, 숫자 ${digits.length}자, 첫코드 ${raw
+            .charCodeAt(0)
+            .toString(16)})`
+        : `암호가 맞지 않아요. (감지된 숫자 ${digits.length}자리)`;
     }
     playDenyFeedback();
     try {
@@ -454,10 +466,12 @@ function initSiteGate() {
     tryUnlock();
   });
 
-  /* 4자리 다 채워지면 자동 시도(편의) */
+  /* iOS 일부 버전에서 input.value 갱신이 한 틱 늦는 경우가 있어 마이크로태스크 뒤에 검사 */
   input.addEventListener("input", () => {
-    const d = gatePinDigitsOnly(input.value);
-    if (d.length >= 4) tryUnlock();
+    setTimeout(() => {
+      const d = gatePinDigitsOnly(input.value);
+      if (d.length >= 4) tryUnlock();
+    }, 0);
   });
 
   requestAnimationFrame(() => {

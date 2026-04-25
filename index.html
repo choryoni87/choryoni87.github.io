@@ -10,10 +10,11 @@
     <link rel="preconnect" href="https://i.ytimg.com" />
     <link rel="preconnect" href="https://www.youtube-nocookie.com" />
     <!-- ?v= 배포·수정 시 올리면 CSS/JS 캐시 무효화(웨딩 pill 등이 안 보일 때) -->
-    <link rel="stylesheet" href="styles.css?v=20260431" />
+    <link rel="stylesheet" href="styles.css?v=20260432" />
     <!-- 암호창: CSS가 늦게/실패해도 전체·중앙에 붙도록(구형 WebKit, 경로 이슈 대비) -->
     <style>
-      #site-gate.site-gate {
+      /* 숨김 클래스(.site-gate--hidden)에 우선순위가 밀리지 않도록 :not으로 한정 */
+      #site-gate:not(.site-gate--hidden) {
         position: fixed;
         top: 0;
         right: 0;
@@ -29,6 +30,10 @@
           max(1.5rem, env(safe-area-inset-bottom, 0px)) max(1.5rem, env(safe-area-inset-left, 0px));
         min-height: 100vh;
         background: rgba(32, 28, 24, 0.48);
+      }
+      /* 암호 통과 후엔 잠금 화면을 무조건 가림(인라인 스타일·외부 CSS 어느 쪽이든 이김) */
+      #site-gate.site-gate--hidden {
+        display: none !important;
       }
     </style>
   </head>
@@ -144,6 +149,6 @@
       </li>
     </template>
 
-    <script src="app.js?v=20260431" type="module"></script>
+    <script src="app.js?v=20260432" type="module"></script>
   </body>
 </html>
