@@ -15,12 +15,10 @@ function normalizeGatePin(raw) {
   return s;
 }
 
+/** 정확히 4자리(0629)만 통과, 전각·공백 정규화 후 비교 */
 function gatePinMatches(entered) {
   const n = normalizeGatePin(entered);
-  if (n === SITE_AUTH_PIN) return true;
-  /* 0629는 일부 키보드에서 629로만 들어가는 경우가 있어 허용 */
-  if (n === "629" && SITE_AUTH_PIN === "0629") return true;
-  return false;
+  return n.length === 4 && /^\d{4}$/.test(n) && n === SITE_AUTH_PIN;
 }
 
 const state = {

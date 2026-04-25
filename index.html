@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://i.ytimg.com" />
     <link rel="preconnect" href="https://www.youtube-nocookie.com" />
     <!-- ?v= 배포·수정 시 올리면 CSS/JS 캐시 무효화(웨딩 pill 등이 안 보일 때) -->
-    <link rel="stylesheet" href="styles.css?v=20260427" />
+    <link rel="stylesheet" href="styles.css?v=20260428" />
     <!-- 암호창: CSS가 늦게/실패해도 전체·중앙에 붙도록(구형 WebKit, 경로 이슈 대비) -->
     <style>
       #site-gate.site-gate {
@@ -42,17 +42,18 @@
     >
       <div class="site-gate__panel">
         <h2 id="gate-title" class="site-gate__title">가족 전용</h2>
-        <p class="site-gate__lead">암호를 입력해 주세요.</p>
+        <p class="site-gate__lead">4자리 암호를 입력해 주세요.</p>
         <form class="site-gate__form" data-gate-form novalidate>
-          <label for="gate-pin" class="visually-hidden">암호 (숫자)</label>
+          <label for="gate-pin" class="visually-hidden">4자리 숫자 암호</label>
           <input
             id="gate-pin"
             class="site-gate__input"
             type="password"
             name="pin"
             inputmode="numeric"
-            pattern="[0-9]*"
-            maxlength="8"
+            pattern="[0-9]{4}"
+            maxlength="4"
+            minlength="4"
             autocomplete="off"
             autocapitalize="off"
             spellcheck="false"
@@ -145,6 +146,6 @@
       </li>
     </template>
 
-    <script src="app.js?v=20260427" type="module"></script>
+    <script src="app.js?v=20260428" type="module"></script>
   </body>
 </html>
