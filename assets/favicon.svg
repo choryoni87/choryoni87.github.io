@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Sprig family icon">
+  <title>Sprig family icon</title>
+  <rect width="64" height="64" rx="14" fill="#EFD9B0"/>
+  <ellipse cx="32" cy="52" rx="10.5" ry="2.4" fill="#8B6840" opacity="0.32"/>
+  <path d="M32 50 C 18 44 10 28 14 14 C 26 18 32 34 32 50 Z" fill="#5E7A3F"/>
+  <path d="M32 50 C 24 40 18 28 16 18" fill="none" stroke="#3F5728" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/>
+  <path d="M32 50 C 46 44 54 28 50 14 C 38 18 32 34 32 50 Z" fill="#5E7A3F"/>
+  <path d="M32 50 C 40 40 46 28 48 18" fill="none" stroke="#3F5728" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/>
+  <path d="M32 50 C 27 40 28 28 32 22 C 36 28 37 40 32 50 Z" fill="#C9683B"/>
+  <path d="M32 50 L32 24" stroke="#8E3F1F" stroke-width="1" stroke-linecap="round" opacity="0.55"/>
+</svg>
