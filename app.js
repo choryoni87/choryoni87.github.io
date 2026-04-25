@@ -3,6 +3,26 @@ const $ = (sel, root = document) => root.querySelector(sel);
 const SITE_AUTH_KEY = "familySiteAuthV1";
 const SITE_AUTH_PIN = "0629";
 
+/** 전각 숫자·공백 제거, NFC 정규화(모바일 키보드·붙여넣기 대비) */
+function normalizeGatePin(raw) {
+  let s = String(raw ?? "")
+    .normalize("NFC")
+    .trim();
+  s = s.replace(/[\s\u00a0\u200b\uFEFF]+/g, "");
+  s = s.replace(/[\uFF10-\uFF19]/g, (ch) =>
+    String.fromCharCode(ch.charCodeAt(0) - 0xff10 + 0x30)
+  );
+  return s;
+}
+
+function gatePinMatches(entered) {
+  const n = normalizeGatePin(entered);
+  if (n === SITE_AUTH_PIN) return true;
+  /* 0629는 일부 키보드에서 629로만 들어가는 경우가 있어 허용 */
+  if (n === "629" && SITE_AUTH_PIN === "0629") return true;
+  return false;
+}
+
 const state = {
   videos: [],
   query: "",
@@ -376,8 +396,7 @@ function initSiteGate() {
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const v = String(input.value || "").trim();
-    if (v === SITE_AUTH_PIN) ok();
+    if (gatePinMatches(input.value)) ok();
     else fail();
   });
 
