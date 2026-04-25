@@ -365,6 +365,7 @@ function initSiteGate() {
   const form = document.getElementById("gate-form");
   const input = document.getElementById("gate-pin");
   const err = gate?.querySelector("[data-gate-error]") ?? null;
+  const panel = gate?.querySelector(".site-gate__panel") ?? null;
 
   if (!gate || !form || !input) {
     load();
@@ -389,11 +390,31 @@ function initSiteGate() {
     load();
   };
 
+  const playDenyFeedback = () => {
+    if (panel) {
+      panel.classList.remove("site-gate__panel--deny");
+      requestAnimationFrame(() => {
+        void panel.offsetWidth;
+        panel.classList.add("site-gate__panel--deny");
+        const done = () => {
+          panel.classList.remove("site-gate__panel--deny");
+        };
+        panel.addEventListener("animationend", done, { once: true });
+      });
+    }
+    input.classList.remove("site-gate__input--error");
+    void input.offsetWidth;
+    requestAnimationFrame(() => {
+      input.classList.add("site-gate__input--error");
+    });
+  };
+
   const fail = () => {
     if (err) {
       err.hidden = false;
       err.textContent = "암호가 맞지 않아요. 4자리 숫자로 다시 입력해 주세요.";
     }
+    playDenyFeedback();
     input.select();
   };
 

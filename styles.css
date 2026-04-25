@@ -348,6 +348,61 @@ body.auth-locked {
   box-shadow:
     0 1px 0 oklch(0.99 0.01 90 / 0.55) inset,
     0 20px 48px -12px oklch(0.2 0.04 40 / 0.35);
+  transform: translateZ(0);
+  will-change: auto;
+}
+
+@keyframes site-gate-shake {
+  0%,
+  100% {
+    transform: translateX(0) translateZ(0);
+  }
+  20% {
+    transform: translateX(-10px) translateZ(0);
+  }
+  40% {
+    transform: translateX(10px) translateZ(0);
+  }
+  60% {
+    transform: translateX(-6px) translateZ(0);
+  }
+  80% {
+    transform: translateX(6px) translateZ(0);
+  }
+}
+
+@keyframes site-gate-deny {
+  0%,
+  100% {
+    box-shadow:
+      0 1px 0 oklch(0.99 0.01 90 / 0.55) inset,
+      0 20px 48px -12px oklch(0.2 0.04 40 / 0.35);
+  }
+  50% {
+    box-shadow:
+      0 1px 0 oklch(0.99 0.01 90 / 0.55) inset,
+      0 20px 48px -12px oklch(0.2 0.04 40 / 0.35),
+      0 0 0 2px oklch(0.55 0.16 20 / 0.5);
+  }
+}
+
+.site-gate__panel--deny {
+  animation: site-gate-shake 0.45s var(--ease) 1;
+}
+
+.site-gate__input--error {
+  border-color: oklch(0.6 0.14 22) !important;
+  animation: site-gate-input-warn 0.5s var(--ease) 1;
+}
+
+@keyframes site-gate-input-warn {
+  0%,
+  100% {
+    background: var(--search-surface);
+  }
+  50% {
+    background: oklch(0.98 0.04 20);
+  }
 }
 
 .site-gate__title {
@@ -869,6 +924,13 @@ body.auth-locked {
   *, *::before, *::after {
     animation: none !important;
     transition: none !important;
+  }
+  /* 틀림 피드백: 흔들림 대신 테두리 링(전역 * animation 끄는 규칙 이후에 재적용) */
+  .site-gate__panel--deny {
+    animation: site-gate-deny 0.45s var(--ease) 1 !important;
+  }
+  .site-gate__input--error {
+    animation: none !important;
   }
   .filter-pill[data-filter="wedding"]:hover {
     transform: none !important;
