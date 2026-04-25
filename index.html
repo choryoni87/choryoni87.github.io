@@ -9,7 +9,28 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="preconnect" href="https://i.ytimg.com" />
     <link rel="preconnect" href="https://www.youtube-nocookie.com" />
-    <link rel="stylesheet" href="styles.css" />
+    <!-- ?v= 배포·수정 시 올리면 CSS/JS 캐시 무효화(웨딩 pill 등이 안 보일 때) -->
+    <link rel="stylesheet" href="styles.css?v=20260425" />
+    <!-- 암호창: CSS가 늦게/실패해도 전체·중앙에 붙도록(구형 WebKit, 경로 이슈 대비) -->
+    <style>
+      #site-gate.site-gate {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        padding: 1.5rem;
+        padding: max(1.5rem, env(safe-area-inset-top, 0px)) max(1.5rem, env(safe-area-inset-right, 0px))
+          max(1.5rem, env(safe-area-inset-bottom, 0px)) max(1.5rem, env(safe-area-inset-left, 0px));
+        min-height: 100vh;
+        background: rgba(32, 28, 24, 0.48);
+      }
+    </style>
   </head>
   <body>
     <div
@@ -124,6 +145,6 @@
       </li>
     </template>
 
-    <script src="app.js" type="module"></script>
+    <script src="app.js?v=20260425" type="module"></script>
   </body>
 </html>
