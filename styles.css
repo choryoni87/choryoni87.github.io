@@ -501,19 +501,6 @@ body.auth-locked {
   padding: 1.35rem 1.25rem 1.6rem;
 }
 
-/* 상단 왼쪽 포인트 컬러(라운드 박스와 맞게 모서리 지난 뒤부터) */
-.main .section::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 1.25rem;
-  width: 4.25rem;
-  height: 2px;
-  background: var(--accent);
-  border-radius: 0 0 3px 3px;
-  pointer-events: none;
-}
-
 .section {
   padding: 4rem 0 1rem;
 }
@@ -533,6 +520,14 @@ body.auth-locked {
   margin-bottom: 1rem;
 }
 
+/* 부제(건수)와 검색창 한 줄 — 좁으면 아래로 줄바꿈 */
+.section__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+}
+
 .section__title {
   font-family: var(--font-display);
   font-weight: 700;
@@ -546,10 +541,15 @@ body.auth-locked {
   margin: 0;
   color: var(--text-dim);
   font-size: 0.95rem;
+  flex: 0 1 auto;
+  min-width: 0;
 }
 
 .search {
-  margin: 1rem 0 0.85rem;
+  margin: 0;
+  flex: 1 1 16rem;
+  min-width: min(100%, 11rem);
+  max-width: 24rem;
 }
 
 .search__input {
@@ -1000,6 +1000,20 @@ body.auth-locked {
   }
   .row__chev {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .section__toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .search {
+    max-width: none;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 }
 
