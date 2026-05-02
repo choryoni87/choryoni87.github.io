@@ -488,20 +488,30 @@ body.auth-locked {
 
 .main .section {
   position: relative;
-  background: oklch(0.985 0.008 78 / 0.62);
-  border-top: 1px solid var(--main-panel-border);
-  border-bottom: 1px solid var(--main-panel-border);
+  background: linear-gradient(
+    180deg,
+    var(--main-panel-a) 0%,
+    var(--main-panel-b) 100%
+  );
+  border: 1px solid var(--main-panel-border);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 0 oklch(1 0.008 92 / 0.45) inset,
+    0 16px 40px -24px var(--main-panel-shade);
   padding: 1.35rem 1.25rem 1.6rem;
 }
 
+/* 상단 왼쪽 포인트 컬러(라운드 박스와 맞게 모서리 지난 뒤부터) */
 .main .section::before {
   content: "";
   position: absolute;
-  top: -1px;
-  left: 0;
+  top: 0;
+  left: 1.25rem;
   width: 4.25rem;
-  height: 1px;
+  height: 2px;
   background: var(--accent);
+  border-radius: 0 0 3px 3px;
+  pointer-events: none;
 }
 
 .section {
