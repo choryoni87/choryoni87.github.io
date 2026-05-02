@@ -482,7 +482,7 @@ body.auth-locked {
 .main {
   max-width: var(--container);
   margin: 0 auto;
-  padding: 0 1rem 2.5rem;
+  padding: 0 1rem 1.6rem;
 }
 
 /* 목록 전체: 은은한 수직 그라데이션 + 얇은 테두리(앨범 한 장을 펼친 느낌) */
@@ -497,7 +497,7 @@ body.auth-locked {
   box-shadow:
     0 1px 0 oklch(1 0.008 92 / 0.45) inset,
     0 16px 40px -24px var(--main-panel-shade);
-  padding: 2.25rem 1.25rem 2.5rem;
+  padding: 1.35rem 1.25rem 1.6rem;
 }
 
 .section {
@@ -510,13 +510,13 @@ body.auth-locked {
   padding-top: 3rem;
 }
 
-/* 첫(유일) 섹션이 main 바로 아래일 때: 헤어와의 간격 */
+/* 첫(유일) 섹션이 main 바로 아래일 때: 히어로와의 간격(너무 넓지 않게) */
 .main > .section:first-child {
-  padding-top: 3.25rem;
+  padding-top: 1.2rem;
 }
 
 .section__head {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .section__title {
@@ -538,7 +538,7 @@ body.auth-locked {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin: 0.5rem 0 1.5rem;
+  margin: 0.35rem 0 1.1rem;
 }
 
 .filter-pill {
@@ -817,7 +817,7 @@ body.auth-locked {
   justify-content: center;
   align-items: center;
   gap: 0.4rem;
-  margin: 1.5rem 0 2.5rem;
+  margin: 1.1rem 0 0.75rem;
   padding-top: 0.25rem;
 }
 
@@ -897,8 +897,8 @@ body.auth-locked {
 
 .foot {
   max-width: var(--container);
-  margin: 3rem auto 4rem;
-  padding: 2rem 1.25rem 0;
+  margin: 2rem auto 2.25rem;
+  padding: 1.5rem 1.25rem 0;
   border-top: 1px solid var(--border);
   color: var(--text-dim);
   font-size: 0.875rem;
