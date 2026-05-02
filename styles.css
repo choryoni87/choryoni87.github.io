@@ -160,15 +160,15 @@ button {
 /* ---------- Hero ---------- */
 
 .hero {
-  padding: 2.75rem 1.25rem 2.4rem;
+  padding: 4.5rem 1.25rem 3.25rem;
 }
 
 .hero__inner {
   max-width: var(--container);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(136px, 184px) 1fr;
-  gap: clamp(1.35rem, 5vw, 3.5rem);
+  grid-template-columns: minmax(150px, 200px) 1fr;
+  gap: 2rem;
   align-items: center;
 }
 
@@ -181,8 +181,8 @@ button {
 .hero__photo-wrap {
   position: relative;
   width: 100%;
-  max-width: 168px;
-  padding: 0.45rem 0.45rem 0.8rem 0.45rem;
+  max-width: 200px;
+  padding: 0.5rem 0.5rem 1.15rem 0.5rem;
   border-radius: 3px 3px 4px 4px;
   background: linear-gradient(
     160deg,
@@ -193,8 +193,8 @@ button {
   border: 1px solid oklch(0.82 0.02 70);
   box-shadow:
     0 1px 0 oklch(0.99 0.01 90 / 0.55) inset,
-    0 18px 34px -18px oklch(0.32 0.04 45 / 0.26),
-    0 5px 14px -10px oklch(0.38 0.03 48 / 0.15);
+    0 22px 44px -16px oklch(0.32 0.04 45 / 0.25),
+    0 8px 20px -8px oklch(0.38 0.03 48 / 0.14);
   transform: rotate(-1.2deg);
   transform-origin: 50% 60%;
   transition: transform 320ms var(--ease), box-shadow 320ms var(--ease);
@@ -228,8 +228,7 @@ button {
 
 .hero__photo-frame {
   position: relative;
-  /* 3/4보다 낮은 프레임 — 첫 화면 세로 압축 */
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 3 / 4;
   border-radius: 1px;
   overflow: hidden;
   background: oklch(0.2 0.02 50);
@@ -953,7 +952,7 @@ body.auth-locked {
 
 @media (max-width: 720px) {
   .hero {
-    padding: 2rem 1rem 1.6rem;
+    padding: 3rem 1rem 2.5rem;
   }
   .hero__inner {
     grid-template-columns: 1fr;
