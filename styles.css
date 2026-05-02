@@ -253,8 +253,8 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* 와이드 원본에서 인물 쪽(오른쪽)이 잘리도록 */
-  object-position: 72% 28%;
+  /* 정사각 일러스트 — 중앙 정렬 */
+  object-position: 50% 50%;
   display: block;
 }
 
@@ -992,7 +992,7 @@ body.auth-locked {
     aspect-ratio: 1 / 1;
   }
   .hero__photo img {
-    object-position: 68% 30%;
+    object-position: 50% 50%;
   }
 
   .hero__title {
