@@ -24,6 +24,8 @@ const state = {
   activeYear: null,
   /** true일 때 `videos[].category === "결혼식"`인 항목만(연도 필터와 배타) */
   weddingOnly: false,
+  /** 제목·설명·메모 검색어 */
+  query: "",
   /** 페이지네이션 — 1-base 현재 페이지 */
   page: 1,
   /** 한 페이지에 표시할 영상 수(전체·연도·웨딩 모두 동일) */
@@ -209,7 +211,7 @@ function renderAll(videos) {
     ? videos.filter((v) => isWeddingCategory(v))
     : videos.filter((v) => !isWeddingListOnly(v));
   const totalInScope = inScope.length;
-  const hasFilter = state.activeYear != null || state.weddingOnly;
+  const hasFilter = state.activeYear != null || state.weddingOnly || normalizeSearch(state.query);
   const headBase = hasFilter
     ? `${total} / ${totalInScope} 편 표시`
     : `총 ${totalInScope} 편 (최신순)`;
@@ -219,7 +221,10 @@ function renderAll(videos) {
   renderPager(pager, pageCount);
 
   if (total === 0) {
-    if (state.weddingOnly) {
+    if (normalizeSearch(state.query)) {
+      empty.textContent =
+        "찾는 영상이 없어요. 다른 단어로 한 번 더 시도해 보세요.";
+    } else if (state.weddingOnly) {
       empty.textContent =
         '웨딩으로 분류한 영상이 아직 없어요. videos.json에 "category": "결혼식"을 넣어 주세요.';
     } else {
@@ -328,6 +333,7 @@ function isWeddingListOnly(v) {
 
 function applyFilters(videos) {
   const year = state.activeYear;
+  const q = normalizeSearch(state.query);
   return videos.filter((v) => {
     if (!state.weddingOnly && isWeddingListOnly(v)) return false;
     if (state.weddingOnly) {
@@ -336,8 +342,29 @@ function applyFilters(videos) {
       const y = yearFromDate(v.date);
       if (y !== year) return false;
     }
+    if (q && !searchHaystack(v).includes(q)) return false;
     return true;
   });
+}
+
+function normalizeSearch(value) {
+  return String(value || "")
+    .normalize("NFC")
+    .trim()
+    .toLocaleLowerCase("ko-KR");
+}
+
+function searchHaystack(video) {
+  return normalizeSearch(
+    [
+      video.title,
+      video.displayTitle,
+      video.description,
+      video.note,
+    ]
+      .filter(Boolean)
+      .join(" ")
+  );
 }
 
 function byDateDesc(a, b) {
@@ -401,6 +428,16 @@ function filterPill(label, pressed, onSelect) {
     renderAll(state.videos);
   });
   return b;
+}
+
+function initSearch() {
+  const input = $("[data-search]");
+  if (!input) return;
+  input.addEventListener("input", () => {
+    state.query = input.value;
+    state.page = 1;
+    renderAll(state.videos);
+  });
 }
 
 function applySite(site) {
@@ -568,4 +605,5 @@ function initSiteGate() {
   });
 }
 
+initSearch();
 initSiteGate();

@@ -33,14 +33,13 @@
 }
 
 :root {
-  --bg: oklch(0.981 0.01 80);
-  --bg-soft: oklch(0.96 0.014 76);
-  --bg-elev: oklch(0.996 0.006 82);
-  /* 목록 패널은 아래로 살짝만 깊어지는 그라데이션(단색 ‘진흙’ 톤 제거) */
-  --main-panel-a: oklch(0.99 0.009 80);
-  --main-panel-b: oklch(0.958 0.016 78);
-  --main-panel-border: oklch(0.87 0.012 77);
-  --main-panel-shade: oklch(0.35 0.025 50 / 0.09);
+  --bg: oklch(0.972 0.012 75);
+  --bg-soft: oklch(0.945 0.018 72);
+  --bg-elev: oklch(0.985 0.008 78);
+  --main-panel-a: oklch(0.985 0.008 78);
+  --main-panel-b: oklch(0.965 0.012 76);
+  --main-panel-border: oklch(0.88 0.014 70);
+  --main-panel-shade: oklch(0.35 0.025 50 / 0.05);
   /* 본문·제목: 같은 팔레트에서 역할마다 톤만 나눔(회색 박스 탈출) */
   --text-body: oklch(0.31 0.028 48);
   --text-ink: oklch(0.22 0.045 46);
@@ -54,8 +53,8 @@
   --fg: var(--text-body);
   --fg-muted: var(--text-dim);
   --fg-subtle: var(--text-chevron);
-  --border: oklch(0.89 0.01 76);
-  --border-strong: oklch(0.83 0.014 74);
+  --border: oklch(0.88 0.014 70);
+  --border-strong: oklch(0.8 0.018 68);
   --accent: oklch(0.585 0.140 38);
   --accent-press: oklch(0.515 0.150 35);
   --accent-fg: oklch(0.985 0.012 80);
@@ -76,10 +75,10 @@
   --container-narrow: 720px;
 
   /* 영상 한 줄: 패널보다 밝은 ‘카드’ 한 종류(줄무늬 제거) */
-  --row-surface: oklch(0.999 0.005 84);
-  --row-border: oklch(0.9 0.01 78);
-  --row-shadow: 0 1px 0 oklch(1 0.006 90 / 0.65) inset, 0 2px 10px -3px var(--main-panel-shade);
-  --row-shadow-hover: 0 1px 0 oklch(1 0.006 90 / 0.5) inset, 0 5px 16px -4px var(--main-panel-shade);
+  --row-surface: oklch(0.992 0.007 80);
+  --row-border: oklch(0.895 0.012 74);
+  --row-shadow: 0 1px 0 oklch(1 0.006 90 / 0.5) inset;
+  --row-shadow-hover: 0 1px 0 oklch(1 0.006 90 / 0.5) inset, 0 6px 18px -14px oklch(0.34 0.03 45 / 0.28);
   --row-open-border: oklch(0.82 0.055 38);
   --row-open-bg: oklch(0.992 0.016 50);
   --row-open-ring: oklch(0.78 0.06 38 / 0.2);
@@ -104,14 +103,17 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
+  background:
+    linear-gradient(90deg, oklch(0.88 0.014 70 / 0.18) 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(0deg, oklch(0.88 0.014 70 / 0.12) 1px, transparent 1px) 0 0 / 28px 28px,
+    var(--bg);
   color: var(--text-body);
   font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 400;
   line-height: 1.6;
   font-feature-settings: "tnum" 0;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 
 img {
@@ -158,15 +160,15 @@ button {
 /* ---------- Hero ---------- */
 
 .hero {
-  padding: 2.25rem 1.25rem 1.75rem;
+  padding: 2.75rem 1.25rem 2.4rem;
 }
 
 .hero__inner {
   max-width: var(--container);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(130px, 168px) 1fr;
-  gap: 1.5rem;
+  grid-template-columns: minmax(136px, 184px) 1fr;
+  gap: clamp(1.35rem, 5vw, 3.5rem);
   align-items: center;
 }
 
@@ -191,8 +193,8 @@ button {
   border: 1px solid oklch(0.82 0.02 70);
   box-shadow:
     0 1px 0 oklch(0.99 0.01 90 / 0.55) inset,
-    0 22px 44px -16px oklch(0.32 0.04 45 / 0.25),
-    0 8px 20px -8px oklch(0.38 0.03 48 / 0.14);
+    0 18px 34px -18px oklch(0.32 0.04 45 / 0.26),
+    0 5px 14px -10px oklch(0.38 0.03 48 / 0.15);
   transform: rotate(-1.2deg);
   transform-origin: 50% 60%;
   transition: transform 320ms var(--ease), box-shadow 320ms var(--ease);
@@ -280,7 +282,7 @@ button {
   font-weight: 700;
   font-size: clamp(2rem, 4.5vw, 2.75rem);
   line-height: 1.15;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   margin: 0 0 0.5rem;
   color: var(--text-ink);
 }
@@ -482,22 +484,25 @@ body.auth-locked {
 .main {
   max-width: var(--container);
   margin: 0 auto;
-  padding: 0 1rem 1.6rem;
+  padding: 0 1rem 1.8rem;
 }
 
-/* 목록 전체: 은은한 수직 그라데이션 + 얇은 테두리(앨범 한 장을 펼친 느낌) */
 .main .section {
-  background: linear-gradient(
-    180deg,
-    var(--main-panel-a) 0%,
-    var(--main-panel-b) 100%
-  );
-  border: 1px solid var(--main-panel-border);
-  border-radius: 16px;
-  box-shadow:
-    0 1px 0 oklch(1 0.008 92 / 0.45) inset,
-    0 16px 40px -24px var(--main-panel-shade);
-  padding: 1.35rem 1.25rem 1.6rem;
+  position: relative;
+  background: oklch(0.985 0.008 78 / 0.62);
+  border-top: 1px solid var(--main-panel-border);
+  border-bottom: 1px solid var(--main-panel-border);
+  padding: 1.5rem 0 1.65rem;
+}
+
+.main .section::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 4.25rem;
+  height: 1px;
+  background: var(--accent);
 }
 
 .section {
@@ -512,7 +517,7 @@ body.auth-locked {
 
 /* 첫(유일) 섹션이 main 바로 아래일 때: 히어로와의 간격(너무 넓지 않게) */
 .main > .section:first-child {
-  padding-top: 1.2rem;
+  padding-top: 1.45rem;
 }
 
 .section__head {
@@ -523,7 +528,7 @@ body.auth-locked {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.5rem;
-  letter-spacing: -0.005em;
+  letter-spacing: 0;
   margin: 0 0 0.25rem;
   color: var(--text-ink);
 }
@@ -534,17 +539,47 @@ body.auth-locked {
   font-size: 0.95rem;
 }
 
+.search {
+  margin: 1rem 0 0.85rem;
+}
+
+.search__input {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid var(--search-border);
+  border-radius: var(--radius);
+  background: var(--search-surface);
+  color: var(--text-ink);
+  font: inherit;
+  font-size: 1rem;
+  padding: 0.75rem 0.95rem;
+  box-shadow: 0 1px 0 oklch(1 0.006 90 / 0.6) inset;
+  transition: border-color 180ms var(--ease), background 180ms var(--ease), box-shadow 180ms var(--ease);
+}
+
+.search__input::placeholder {
+  color: var(--search-placeholder);
+}
+
+.search__input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--ring), 0 1px 0 oklch(1 0.006 90 / 0.6) inset;
+}
+
 .filters {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin: 0.35rem 0 1.1rem;
+  margin: 0 0 1.1rem;
 }
 
 .filter-pill {
   appearance: none;
   border: 1px solid var(--border);
-  background: var(--bg-elev);
+  background: var(--bg-soft);
   color: var(--text-dim);
   border-radius: 999px;
   padding: 0.3rem 0.85rem;
@@ -561,7 +596,7 @@ body.auth-locked {
 .filter-pill[aria-pressed="true"] {
   color: var(--accent-press);
   border-color: var(--accent);
-  background: oklch(0.99 0.03 40);
+  background: oklch(0.965 0.036 45);
   font-weight: 600;
 }
 
@@ -637,36 +672,41 @@ body.auth-locked {
   margin: 0;
 }
 
+.row:last-child .row__main:not([aria-expanded="true"]) {
+  border-bottom: 1px solid var(--row-border);
+}
+
 .row__main {
   display: grid;
   grid-template-columns: 144px 1fr 24px;
   gap: 1.25rem;
   align-items: stretch;
   width: 100%;
-  padding: 1.05rem 1.1rem 1.05rem 1rem;
+  padding: 0.85rem 0.85rem 0.85rem 0;
   text-align: left;
   cursor: pointer;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--row-border);
-  background: var(--row-surface);
+  border-radius: 0;
+  border: 0;
+  border-top: 1px solid var(--row-border);
+  background: transparent;
   box-shadow: var(--row-shadow);
   transition: background 200ms var(--ease), border-color 200ms var(--ease), box-shadow 200ms var(--ease),
     transform 260ms var(--ease);
 }
 
 .row__main:hover {
-  background: oklch(1 0.004 85);
+  background: oklch(0.985 0.012 74 / 0.72);
   border-color: oklch(0.86 0.012 78);
   box-shadow: var(--row-shadow-hover);
   transform: translateY(-1px);
 }
 
 .row__main[aria-expanded="true"] {
-  background: var(--row-open-bg);
+  background: oklch(0.982 0.018 52 / 0.78);
   border-color: var(--row-open-border);
-  box-shadow: 0 0 0 1px var(--row-open-ring), var(--row-shadow);
+  box-shadow: 0 1px 0 var(--row-open-ring) inset;
   transform: translateY(0);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border-radius: var(--radius) var(--radius) 0 0;
 }
 
 .row__main:focus-visible {
@@ -729,7 +769,7 @@ body.auth-locked {
   font-weight: 600;
   line-height: 1.35;
   color: var(--text-ink);
-  letter-spacing: -0.005em;
+  letter-spacing: 0;
 }
 
 .row__meta {
@@ -772,13 +812,13 @@ body.auth-locked {
 
 .row__main[aria-expanded="true"] + .row__player {
   display: block;
-  background: linear-gradient(180deg, var(--row-open-bg) 0%, var(--row-player-mix) 100%);
+  background: oklch(0.967 0.016 76);
   border: 1px solid var(--row-open-border);
   border-top: none;
   margin-top: -1px;
   padding: 0.5rem 1rem 1rem 1rem;
-  box-shadow: 0 4px 14px -8px var(--main-panel-shade);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  box-shadow: none;
+  border-radius: 0 0 var(--radius) var(--radius);
 }
 
 .row__player-inner {
@@ -944,7 +984,7 @@ body.auth-locked {
   .row__main {
     grid-template-columns: 1fr;
     gap: 0.75rem;
-    padding: 1rem 0.9rem 1.1rem;
+    padding: 1rem 0 1.1rem;
   }
   .row__thumb {
     width: 100%;

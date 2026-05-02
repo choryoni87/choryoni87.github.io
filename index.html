@@ -10,12 +10,12 @@
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png?v=20260437" />
     <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png?v=20260437" />
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png?v=20260437" />
-    <meta name="theme-color" content="#F59E0B" />
+    <meta name="theme-color" content="#a7583d" />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="preconnect" href="https://i.ytimg.com" />
     <link rel="preconnect" href="https://www.youtube-nocookie.com" />
     <!-- ?v= 배포·수정 시 올리면 CSS/JS 캐시 무효화(웨딩 pill 등이 안 보일 때) -->
-    <link rel="stylesheet" href="styles.css?v=20260502c" />
+    <link rel="stylesheet" href="styles.css?v=20260502d" />
     <!-- 암호창: CSS가 늦게/실패해도 전체·중앙에 붙도록(구형 WebKit, 경로 이슈 대비) -->
     <style>
       /* 숨김 클래스(.site-gate--hidden)에 우선순위가 밀리지 않도록 :not으로 한정 */
@@ -96,7 +96,7 @@
           <p class="hero__tagline" data-site-tagline>
             우리 가족의 추억이 머무는 영상, 늘 함께하길 바라요.
           </p>
-          <p class="hero__hint">사랑하는 유미, 도유 ❤️</p>
+          <p class="hero__hint">사랑하는 유미, 도유</p>
         </div>
       </div>
     </header>
@@ -107,6 +107,17 @@
           <h2 id="all-heading" class="section__title">전체</h2>
           <p class="section__sub" data-count></p>
         </div>
+        <div class="search">
+          <label class="visually-hidden" for="video-search">영상 검색</label>
+          <input
+            id="video-search"
+            class="search__input"
+            type="search"
+            placeholder="제목이나 짧은 메모로 찾기"
+            autocomplete="off"
+            data-search
+          />
+        </div>
         <div class="filters" data-filters aria-label="연도·분류"></div>
         <ul class="rows" data-list="all" aria-live="polite"></ul>
         <p class="empty" data-empty hidden>찾는 영상이 없어요. 다른 단어로 한 번 더 시도해 보세요.</p>
@@ -115,7 +126,7 @@
     </main>
 
     <footer class="foot">
-      <p>이 사이트는 가족용입니다. 링크 공유는 가족끼리만 ❤️</p>
+      <p>이 사이트는 가족용입니다. 링크 공유는 가족끼리만.</p>
     </footer>
 
     <template id="row-template">
