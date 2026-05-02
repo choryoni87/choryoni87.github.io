@@ -549,9 +549,9 @@ body.auth-locked {
 .search {
   margin: 0;
   margin-left: auto;
-  flex: 0 1 18rem;
-  min-width: min(100%, 9.5rem);
-  max-width: 18rem;
+  flex: 0 1 14rem;
+  min-width: min(100%, 8rem);
+  max-width: 14rem;
 }
 
 .search__input {
