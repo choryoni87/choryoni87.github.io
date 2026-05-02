@@ -160,149 +160,82 @@ button {
 /* ---------- Hero ---------- */
 
 .hero {
-  padding: 4.5rem 1.25rem 3.25rem;
+  position: relative;
+  min-height: min(68vh, 620px);
+  display: grid;
+  align-items: center;
+  padding: clamp(5rem, 9vw, 7.5rem) 1.25rem clamp(4rem, 7vw, 6rem);
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, oklch(0.18 0.04 42 / 0.92) 0%, oklch(0.22 0.04 42 / 0.72) 38%, oklch(0.38 0.03 55 / 0.08) 78%),
+    linear-gradient(180deg, oklch(0.1 0.02 45 / 0.18) 0%, transparent 42%, oklch(0.1 0.02 45 / 0.28) 100%),
+    url("assets/hero-wide.jpg") center / cover no-repeat;
+  color: var(--accent-fg);
 }
 
 .hero__inner {
   max-width: var(--container);
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(150px, 200px) 1fr;
-  gap: 2rem;
-  align-items: center;
-}
-
-/* 앨범/폴라로이드: 밝은 매트 + 아래로 두꺼운 흰 여백 + 떠 있는 그림자 */
-.hero__photo {
-  margin: 0;
-  justify-self: start;
-}
-
-.hero__photo-wrap {
-  position: relative;
   width: 100%;
-  max-width: 200px;
-  padding: 0.5rem 0.5rem 1.15rem 0.5rem;
-  border-radius: 3px 3px 4px 4px;
-  background: linear-gradient(
-    160deg,
-    oklch(0.99 0.012 80) 0%,
-    oklch(0.955 0.02 75) 48%,
-    oklch(0.9 0.028 70) 100%
-  );
-  border: 1px solid oklch(0.82 0.02 70);
-  box-shadow:
-    0 1px 0 oklch(0.99 0.01 90 / 0.55) inset,
-    0 22px 44px -16px oklch(0.32 0.04 45 / 0.25),
-    0 8px 20px -8px oklch(0.38 0.03 48 / 0.14);
-  transform: rotate(-1.2deg);
-  transform-origin: 50% 60%;
-  transition: transform 320ms var(--ease), box-shadow 320ms var(--ease);
+  display: block;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .hero__photo-wrap:hover {
-    transform: rotate(-0.6deg) translateY(-3px);
-    box-shadow:
-      0 1px 0 oklch(0.99 0.01 90 / 0.55) inset,
-      0 28px 52px -18px oklch(0.3 0.045 45 / 0.28),
-      0 10px 24px -8px oklch(0.35 0.03 48 / 0.16);
-  }
-}
-
-/* 마스킹 테이프 느낌(상단, 전체 보더가 아닌 짧은 띠) */
-.hero__photo-tape {
-  position: absolute;
-  z-index: 1;
-  top: -0.28rem;
-  left: 50%;
-  width: 38%;
-  min-width: 3.2rem;
-  height: 0.6rem;
-  transform: translateX(-50%) rotate(-1.5deg);
-  border-radius: 1px;
-  background: oklch(0.94 0.03 78 / 0.9);
-  box-shadow: 0 1px 2px oklch(0.3 0.02 50 / 0.12);
-  pointer-events: none;
-}
-
-.hero__photo-frame {
-  position: relative;
-  aspect-ratio: 3 / 4;
-  border-radius: 1px;
-  overflow: hidden;
-  background: oklch(0.2 0.02 50);
-  box-shadow: inset 0 0 0 1px oklch(0.45 0.02 55 / 0.35);
-}
-
-/* 사진 위 은은한 비네트 + 위쪽 기류 하이라이트(액자 위 유리) */
-.hero__photo-frame::after {
+.hero::after {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: auto 0 0;
+  height: 8rem;
   pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    oklch(0.99 0.01 90 / 0.22) 0%,
-    transparent 32%,
-    transparent 55%,
-    oklch(0.12 0.03 45 / 0.22) 100%
-  );
-}
-
-.hero__photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 30%;
-  display: block;
+  z-index: -1;
+  background: linear-gradient(180deg, transparent, var(--bg));
 }
 
 .hero__eyebrow {
   margin: 0 0 0.5rem;
-  font-size: 0.825rem;
+  font-size: 0.95rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-eyebrow);
-  font-weight: 600;
+  color: oklch(0.86 0.075 55);
+  font-weight: 700;
 }
 
 .hero__text {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  /* 제목/태그/힌트 ‘본문’ 폭(힌트는 이 안에서만 우측 정렬) */
-  --hero-copy-width: 32ch;
+  align-items: flex-start;
+  max-width: 42rem;
 }
 
 .hero__title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2rem, 4.5vw, 2.75rem);
-  line-height: 1.15;
+  font-size: clamp(3rem, 7vw, 5.4rem);
+  line-height: 1.02;
   letter-spacing: 0;
-  margin: 0 0 0.5rem;
-  color: var(--text-ink);
+  margin: 0 0 1.1rem;
+  color: oklch(0.985 0.012 80);
+  text-shadow: 0 2px 18px oklch(0.08 0.02 35 / 0.4);
 }
 
 .hero__tagline {
-  font-size: 1.0625rem;
-  margin: 0 0 0.3rem;
-  color: var(--text-lead);
-  max-width: var(--hero-copy-width);
+  font-size: clamp(1.15rem, 2.1vw, 1.55rem);
+  margin: 0 0 0.7rem;
+  color: oklch(0.945 0.018 74);
+  max-width: 34rem;
+  text-shadow: 0 2px 14px oklch(0.08 0.02 35 / 0.42);
 }
 
-/* 태그라인과 같은 폭 안에서만 오른쪽(열 전체 끝이 아님) */
 .hero__hint {
-  font-size: 0.9rem;
-  color: var(--text-caption);
+  font-size: clamp(1.05rem, 1.7vw, 1.25rem);
+  color: oklch(0.93 0.045 64);
   margin: 0;
-  line-height: 1.25;
-  text-align: right;
-  align-self: flex-start;
-  width: min(var(--hero-copy-width), 100%);
+  line-height: 1.35;
+  text-align: left;
+  font-weight: 600;
   box-sizing: border-box;
+  text-shadow: 0 2px 12px oklch(0.08 0.02 35 / 0.46);
 }
 
 /* ---------- 잠금(암호) ---------- */
@@ -965,32 +898,24 @@ body.auth-locked {
 
 @media (max-width: 720px) {
   .hero {
-    padding: 3rem 1rem 2.5rem;
+    min-height: 560px;
+    align-items: end;
+    padding: 5rem 1rem 4rem;
+    background:
+      linear-gradient(180deg, oklch(0.13 0.03 42 / 0.18) 0%, oklch(0.13 0.03 42 / 0.5) 42%, oklch(0.13 0.03 42 / 0.88) 100%),
+      url("assets/hero-wide.jpg") 68% center / cover no-repeat;
   }
   .hero__inner {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
     text-align: left;
   }
-  .hero__photo {
-    width: 140px;
+  .hero__text {
+    max-width: 100%;
   }
-  .hero__photo-wrap {
-    max-width: none;
-    width: 100%;
-    padding: 0.4rem 0.4rem 0.9rem 0.4rem;
-    transform: rotate(-0.8deg);
+  .hero__title {
+    font-size: clamp(2.8rem, 15vw, 4.5rem);
   }
-  @media (hover: hover) and (pointer: fine) {
-    .hero__photo-wrap:hover {
-      transform: rotate(-0.4deg) translateY(-2px);
-    }
-  }
-  .hero__photo-frame {
-    aspect-ratio: 1 / 1;
-  }
-  .hero__photo img {
-    object-position: 50% 28%;
+  .hero__tagline {
+    font-size: 1.08rem;
   }
 
   .row__main {
@@ -1035,10 +960,6 @@ body.auth-locked {
     animation: none !important;
   }
   .filter-pill[data-filter="wedding"]:hover {
-    transform: none !important;
-  }
-  .hero__photo-wrap,
-  .hero__photo-wrap:hover {
     transform: none !important;
   }
   .row__main:hover,
