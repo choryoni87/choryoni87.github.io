@@ -27,7 +27,7 @@ const state = {
   /** 페이지네이션 — 1-base 현재 페이지 */
   page: 1,
   /** 한 페이지에 표시할 영상 수(전체·연도·웨딩 모두 동일) */
-  pageSize: 5,
+  pageSize: 6,
 };
 
 function fmtDate(iso) {
