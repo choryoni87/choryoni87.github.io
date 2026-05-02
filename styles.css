@@ -520,12 +520,13 @@ body.auth-locked {
   margin-bottom: 1rem;
 }
 
-/* 부제(건수)와 검색창 한 줄 — 좁으면 아래로 줄바꿈 */
+/* 부제(건수) 왼쪽, 검색창 오른쪽 — 좁으면 아래로 줄바꿈 */
 .section__toolbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.6rem 1rem;
+  justify-content: space-between;
 }
 
 .section__title {
@@ -547,7 +548,8 @@ body.auth-locked {
 
 .search {
   margin: 0;
-  flex: 1 1 16rem;
+  margin-left: auto;
+  flex: 0 1 24rem;
   min-width: min(100%, 11rem);
   max-width: 24rem;
 }
@@ -564,6 +566,7 @@ body.auth-locked {
   font: inherit;
   font-size: 1rem;
   padding: 0.75rem 0.95rem;
+  text-align: center;
   box-shadow: 0 1px 0 oklch(1 0.006 90 / 0.6) inset;
   transition: border-color 180ms var(--ease), background 180ms var(--ease), box-shadow 180ms var(--ease);
 }
@@ -1008,12 +1011,14 @@ body.auth-locked {
     flex-direction: column;
     align-items: stretch;
     gap: 0.75rem;
+    justify-content: flex-start;
   }
 
   .search {
     max-width: none;
     flex: 1 1 auto;
     min-width: 0;
+    margin-left: 0;
   }
 }
 
