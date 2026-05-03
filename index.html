@@ -38,7 +38,7 @@
     <link rel="preconnect" href="https://i.ytimg.com" />
     <link rel="preconnect" href="https://www.youtube-nocookie.com" />
     <!-- ?v= 배포·수정 시 올리면 CSS/JS 캐시 무효화(웨딩 pill 등이 안 보일 때) -->
-    <link rel="stylesheet" href="styles.css?v=20260504e" />
+    <link rel="stylesheet" href="styles.css?v=20260504f" />
     <!-- 암호창: CSS가 늦게/실패해도 전체·중앙에 붙도록(구형 WebKit, 경로 이슈 대비) -->
     <style>
       /* 숨김 클래스(.site-gate--hidden)에 우선순위가 밀리지 않도록 :not으로 한정 */
@@ -96,37 +96,6 @@
       </div>
     </div>
     <header class="hero" aria-label="우리 가족 영상">
-      <button
-        type="button"
-        id="theme-toggle"
-        class="theme-toggle"
-        aria-label="다크 모드로 전환"
-        title="다크 모드"
-      >
-        <span class="theme-toggle__gfx" aria-hidden="true">
-          <svg
-            class="theme-toggle__svg theme-toggle__svg--sun"
-            viewBox="0 0 24 24"
-            width="22"
-            height="22"
-            aria-hidden="true"
-          >
-            <circle cx="12" cy="12" r="3.75" />
-            <path
-              d="M12 1.75v2M12 20.25v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1.75 12h2M20.25 12h2M5.64 18.36l-1.42 1.42M19.78 4.22l-1.42 1.42"
-            />
-          </svg>
-          <svg
-            class="theme-toggle__svg theme-toggle__svg--moon"
-            viewBox="0 0 24 24"
-            width="22"
-            height="22"
-            aria-hidden="true"
-          >
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-          </svg>
-        </span>
-      </button>
       <div class="hero__inner">
         <figure class="hero__photo">
           <div class="hero__photo-wrap">
@@ -151,6 +120,37 @@
           </p>
           <p class="hero__hint">사랑하는 유미와 도유 ❤️</p>
         </div>
+        <button
+          type="button"
+          id="theme-toggle"
+          class="theme-toggle"
+          aria-label="다크 모드로 전환"
+          title="다크 모드"
+        >
+          <span class="theme-toggle__gfx" aria-hidden="true">
+            <svg
+              class="theme-toggle__svg theme-toggle__svg--sun"
+              viewBox="0 0 24 24"
+              width="22"
+              height="22"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="3.75" />
+              <path
+                d="M12 1.75v2M12 20.25v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1.75 12h2M20.25 12h2M5.64 18.36l-1.42 1.42M19.78 4.22l-1.42 1.42"
+              />
+            </svg>
+            <svg
+              class="theme-toggle__svg theme-toggle__svg--moon"
+              viewBox="0 0 24 24"
+              width="22"
+              height="22"
+              aria-hidden="true"
+            >
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+          </span>
+        </button>
       </div>
     </header>
 
@@ -209,6 +209,6 @@
       </li>
     </template>
 
-    <script src="app.js?v=20260504e" type="module"></script>
+    <script src="app.js?v=20260504f" type="module"></script>
   </body>
 </html>

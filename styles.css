@@ -229,6 +229,7 @@ button {
 }
 
 .hero__inner {
+  position: relative;
   max-width: var(--container);
   margin: 0 auto;
   display: grid;
@@ -331,6 +332,13 @@ button {
   max-width: var(--hero-copy-width);
 }
 
+/* 테마 버튼이 텍스트 열 우상단에 겹치므로 데스크톱에서 한 줄 확보 */
+@media (min-width: 721px) {
+  .hero__text {
+    padding-right: 3.5rem;
+  }
+}
+
 .hero__eyebrow {
   margin: 0 0 0.5rem;
   font-size: 0.95rem;
@@ -414,11 +422,11 @@ html[data-theme="dark"] .hero__photo-frame::after {
   }
 }
 
-/* 테마 전환 (히어로 우측 상단) */
+/* 테마 전환: hero__inner(본문 폭) 우측 상단 — 뷰포트 끝이 아닌 레이아웃에 맞춤 */
 .theme-toggle {
   position: absolute;
-  top: max(0.75rem, calc(env(safe-area-inset-top, 0px) + 0.25rem));
-  right: max(0.75rem, calc(env(safe-area-inset-right, 0px) + 0.25rem));
+  top: 0.2rem;
+  right: 0;
   z-index: 5;
   display: inline-flex;
   align-items: center;
@@ -1263,8 +1271,8 @@ html[data-theme="dark"] .filter-pill[data-filter="wedding"][aria-pressed="true"]
 
 @media (max-width: 720px) {
   .theme-toggle {
-    top: max(0.5rem, calc(env(safe-area-inset-top, 0px) + 0.15rem));
-    right: max(0.5rem, calc(env(safe-area-inset-right, 0px) + 0.15rem));
+    top: 0;
+    right: 0;
     width: 2.875rem;
     height: 2.875rem;
   }
