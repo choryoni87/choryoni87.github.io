@@ -87,6 +87,55 @@
   --search-placeholder: oklch(0.66 0.016 60);
   --search-surface: oklch(0.99 0.008 82);
   --search-border: oklch(0.9 0.01 78);
+  /* 배경 그리드·딤 */
+  --grid-line-a: oklch(0.88 0.014 70 / 0.18);
+  --grid-line-b: oklch(0.88 0.014 70 / 0.12);
+  --site-gate-scrim: oklch(0.2 0.03 50 / 0.45);
+  --pill-pressed-bg: oklch(0.965 0.036 45);
+  color-scheme: light;
+}
+
+/* 다크: 뉴트럴 블랙 톤(웜 그레이 배제), 휴는 285°로만 미세한 냉 흑 */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: oklch(0.09 0.003 285);
+  --bg-soft: oklch(0.12 0.004 285);
+  --bg-elev: oklch(0.16 0.005 285);
+  --main-panel-a: oklch(0.14 0.005 285);
+  --main-panel-b: oklch(0.11 0.004 285);
+  --main-panel-border: oklch(0.26 0.008 285);
+  --main-panel-shade: oklch(0 0 0 / 0.65);
+  --text-body: oklch(0.86 0.01 285);
+  --text-ink: oklch(0.97 0.006 285);
+  --text-lead: oklch(0.72 0.012 285);
+  --text-dim: oklch(0.5 0.012 285);
+  --text-caption: oklch(0.68 0.02 285);
+  --text-date: oklch(0.7 0.02 285);
+  --text-blurb: oklch(0.7 0.014 285);
+  --text-eyebrow: oklch(0.72 0.08 35);
+  --text-chevron: oklch(0.45 0.01 285);
+  --border: oklch(0.28 0.008 285);
+  --border-strong: oklch(0.4 0.01 285);
+  --accent: oklch(0.76 0.15 45);
+  --accent-press: oklch(0.82 0.16 46);
+  --accent-fg: oklch(0.1 0.02 285);
+  --ring: oklch(0.68 0.14 45 / 0.42);
+  --row-surface: oklch(0.17 0.005 285);
+  --row-border: oklch(0.3 0.008 285);
+  --row-shadow: 0 1px 0 oklch(0.34 0.012 285 / 0.45) inset;
+  --row-shadow-hover: 0 1px 0 oklch(0.38 0.012 285 / 0.4) inset,
+    0 8px 28px -12px oklch(0 0 0 / 0.55);
+  --row-open-border: oklch(0.52 0.06 40);
+  --row-open-bg: oklch(0.2 0.007 285);
+  --row-open-ring: oklch(0.48 0.06 42 / 0.35);
+  --row-player-mix: oklch(0.1 0.004 285);
+  --search-placeholder: oklch(0.48 0.012 285);
+  --search-surface: oklch(0.13 0.005 285);
+  --search-border: oklch(0.32 0.01 285);
+  --grid-line-a: oklch(0.28 0.01 285 / 0.35);
+  --grid-line-b: oklch(0.28 0.01 285 / 0.18);
+  --site-gate-scrim: oklch(0 0 0 / 0.82);
+  --pill-pressed-bg: oklch(0.22 0.02 40 / 0.85);
 }
 
 *,
@@ -99,13 +148,26 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-size-adjust: 100%;
+  /* 모바일: 오버스크롤·주소창 영역까지 배경 톤 유지 */
+  min-height: 100%;
+  min-height: 100dvh;
+  background: var(--bg);
+}
+
+@supports (-webkit-touch-callout: none) {
+  html {
+    min-height: -webkit-fill-available;
+  }
 }
 
 body {
   margin: 0;
+  min-height: 100%;
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
   background:
-    linear-gradient(90deg, oklch(0.88 0.014 70 / 0.18) 1px, transparent 1px) 0 0 / 28px 28px,
-    linear-gradient(0deg, oklch(0.88 0.014 70 / 0.12) 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(90deg, var(--grid-line-a) 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(0deg, var(--grid-line-b) 1px, transparent 1px) 0 0 / 28px 28px,
     var(--bg);
   color: var(--text-body);
   font-family: var(--font-sans);
@@ -160,6 +222,7 @@ button {
 /* ---------- Hero (폴라로이드 + 텍스트 — 바디와 같은 크림·그리드 배경) ---------- */
 
 .hero {
+  position: relative;
   padding: 4.5rem 1.25rem 3.25rem;
   color: var(--text-body);
   background: transparent;
@@ -307,6 +370,146 @@ button {
   font-weight: 600;
 }
 
+/* 다크 모드: 히어로 폴라로이드 — 블랙 톤 */
+html[data-theme="dark"] .hero__photo-wrap {
+  background: linear-gradient(
+    160deg,
+    oklch(0.22 0.006 285) 0%,
+    oklch(0.16 0.005 285) 48%,
+    oklch(0.12 0.004 285) 100%
+  );
+  border-color: oklch(0.34 0.01 285);
+  box-shadow:
+    0 1px 0 oklch(0.4 0.012 285 / 0.3) inset,
+    0 22px 44px -16px oklch(0 0 0 / 0.55),
+    0 8px 20px -8px oklch(0 0 0 / 0.45);
+}
+
+html[data-theme="dark"] .hero__photo-tape {
+  background: oklch(0.3 0.012 285 / 0.92);
+  box-shadow: 0 1px 2px oklch(0 0 0 / 0.45);
+}
+
+html[data-theme="dark"] .hero__photo-frame {
+  background: oklch(0.07 0.003 285);
+  box-shadow: inset 0 0 0 1px oklch(0.35 0.01 285 / 0.45);
+}
+
+html[data-theme="dark"] .hero__photo-frame::after {
+  background: linear-gradient(
+    180deg,
+    oklch(0.95 0.01 285 / 0.08) 0%,
+    transparent 32%,
+    transparent 55%,
+    oklch(0 0 0 / 0.45) 100%
+  );
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html[data-theme="dark"] .hero__photo-wrap:hover {
+    box-shadow:
+      0 1px 0 oklch(0.42 0.012 285 / 0.35) inset,
+      0 28px 52px -18px oklch(0 0 0 / 0.62),
+      0 10px 24px -8px oklch(0 0 0 / 0.52);
+  }
+}
+
+/* 테마 전환 (히어로 우측 상단) */
+.theme-toggle {
+  position: absolute;
+  top: max(0.75rem, calc(env(safe-area-inset-top, 0px) + 0.25rem));
+  right: max(0.75rem, calc(env(safe-area-inset-right, 0px) + 0.25rem));
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  color: var(--text-ink);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  box-shadow: 0 1px 0 oklch(1 0.008 92 / 0.35) inset;
+  transition: border-color 180ms var(--ease), background 180ms var(--ease), transform 200ms var(--ease);
+}
+
+.theme-toggle:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-soft);
+}
+
+.theme-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+/* 해·달: 얇은 스트로크(Lucide/Feather 느낌), 전환 시 회전·크로스페이드 */
+.theme-toggle__gfx {
+  position: relative;
+  width: 1.375rem;
+  height: 1.375rem;
+  display: grid;
+  place-items: center;
+  color: inherit;
+}
+
+.theme-toggle__svg {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition:
+    opacity 0.32s var(--ease),
+    transform 0.42s var(--ease);
+}
+
+.theme-toggle__svg--sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.theme-toggle__svg--moon {
+  opacity: 0;
+  transform: rotate(72deg) scale(0.86);
+}
+
+html[data-theme="dark"] .theme-toggle__svg--sun {
+  opacity: 0;
+  transform: rotate(-72deg) scale(0.86);
+}
+
+html[data-theme="dark"] .theme-toggle__svg--moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+html[data-theme="dark"] .theme-toggle {
+  box-shadow: 0 1px 0 oklch(0.32 0.012 285 / 0.35) inset;
+}
+
+/* 터치 기기: 탭 시 피드백(iOS·안드로이드 공통) */
+@media (hover: none) {
+  .theme-toggle:active {
+    border-color: var(--border-strong);
+    background: var(--bg-soft);
+    transform: scale(0.96);
+  }
+}
+
 /* ---------- 잠금(암호) ---------- */
 body.auth-locked {
   overflow: hidden;
@@ -333,7 +536,7 @@ body.auth-locked {
     max(1.5rem, env(safe-area-inset-left, 0px));
   /* oklch 미지원 시에도 딤드가 남도록 */
   background: rgba(32, 28, 24, 0.48);
-  background: oklch(0.2 0.03 50 / 0.45);
+  background: var(--site-gate-scrim);
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
 }
@@ -610,7 +813,7 @@ body.auth-locked {
 .filter-pill[aria-pressed="true"] {
   color: var(--accent-press);
   border-color: var(--accent);
-  background: oklch(0.965 0.036 45);
+  background: var(--pill-pressed-bg);
   font-weight: 600;
 }
 
@@ -852,6 +1055,100 @@ body.auth-locked {
   border: 0;
 }
 
+/* 다크 모드: 블랙 톤 — 하드코딩된 라이트 전용 표면 보정 */
+html[data-theme="dark"] .site-gate__panel {
+  box-shadow:
+    0 1px 0 oklch(0.32 0.01 285 / 0.4) inset,
+    0 20px 48px -12px oklch(0 0 0 / 0.7);
+}
+
+html[data-theme="dark"] .search__input {
+  box-shadow: 0 1px 0 oklch(0.22 0.01 285 / 0.45) inset;
+}
+
+html[data-theme="dark"] .search__input:focus {
+  box-shadow: 0 0 0 3px var(--ring), 0 1px 0 oklch(0.18 0.01 285 / 0.5) inset;
+}
+
+html[data-theme="dark"] .pager__btn--current {
+  box-shadow:
+    0 1px 0 oklch(0.35 0.01 285 / 0.35) inset,
+    0 3px 10px -4px oklch(0 0 0 / 0.5);
+}
+
+html[data-theme="dark"] .row__player-inner {
+  background: oklch(0.06 0.003 285);
+}
+
+html[data-theme="dark"] .row__main:hover {
+  background: oklch(0.2 0.006 285 / 0.95);
+  border-color: oklch(0.42 0.012 285);
+}
+
+html[data-theme="dark"] .row__main[aria-expanded="true"] {
+  background: oklch(0.18 0.006 285 / 0.98);
+}
+
+html[data-theme="dark"] .row__thumb {
+  background: oklch(0.12 0.005 285);
+}
+
+html[data-theme="dark"] .row__thumb::after {
+  background: linear-gradient(180deg, transparent 60%, oklch(0 0 0 / 0.5));
+}
+
+html[data-theme="dark"] .row__play {
+  background: oklch(0.22 0.01 285 / 0.96);
+  color: var(--accent-press);
+}
+
+html[data-theme="dark"] .row__main[aria-expanded="true"] + .row__player {
+  background: oklch(0.11 0.004 285);
+}
+
+html[data-theme="dark"] .main .section {
+  box-shadow:
+    0 1px 0 oklch(0.32 0.012 285 / 0.4) inset,
+    0 16px 40px -24px var(--main-panel-shade);
+}
+
+html[data-theme="dark"] .filter-pill[data-filter="wedding"] {
+  border-color: oklch(0.42 0.035 12);
+  background: linear-gradient(
+    155deg,
+    oklch(0.2 0.008 285) 0%,
+    oklch(0.17 0.02 15) 45%,
+    oklch(0.15 0.028 12) 100%
+  );
+  color: oklch(0.88 0.045 20);
+  box-shadow:
+    0 1px 0 oklch(0.35 0.01 285 / 0.45) inset,
+    0 2px 12px -3px oklch(0 0 0 / 0.4);
+}
+
+html[data-theme="dark"] .filter-pill[data-filter="wedding"]:hover {
+  color: oklch(0.95 0.04 22);
+  border-color: oklch(0.52 0.05 12);
+  box-shadow:
+    0 1px 0 oklch(0.38 0.012 285 / 0.45) inset,
+    0 4px 16px -4px oklch(0 0 0 / 0.5);
+}
+
+html[data-theme="dark"] .filter-pill[data-filter="wedding"][aria-pressed="true"] {
+  color: oklch(0.97 0.04 24);
+  border-color: oklch(0.55 0.08 8);
+  background: linear-gradient(
+    160deg,
+    oklch(0.26 0.04 35) 0%,
+    oklch(0.22 0.05 18) 48%,
+    oklch(0.19 0.06 12) 100%
+  );
+  box-shadow:
+    0 1px 0 oklch(0.4 0.015 285 / 0.45) inset,
+    0 0 0 1.5px oklch(0.52 0.1 8 / 0.45),
+    0 3px 14px -4px oklch(0 0 0 / 0.45);
+}
+
 /* ---------- Empty / Footer ---------- */
 
 .empty {
@@ -965,8 +1262,16 @@ body.auth-locked {
 /* ---------- Responsive ---------- */
 
 @media (max-width: 720px) {
+  .theme-toggle {
+    top: max(0.5rem, calc(env(safe-area-inset-top, 0px) + 0.15rem));
+    right: max(0.5rem, calc(env(safe-area-inset-right, 0px) + 0.15rem));
+    width: 2.875rem;
+    height: 2.875rem;
+  }
+
   .hero {
     padding: 3rem 1rem 2.5rem;
+    padding-top: max(3rem, calc(env(safe-area-inset-top, 0px) + 2.25rem));
   }
   .hero__inner {
     grid-template-columns: 1fr;

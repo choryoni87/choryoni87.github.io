@@ -1,6 +1,7 @@
 const $ = (sel, root = document) => root.querySelector(sel);
 
 const SITE_AUTH_KEY = "familySiteAuthV1";
+const THEME_STORAGE_KEY = "familySiteTheme";
 // 오직 0-9 네 자리(앞자리 0 포함)
 const SITE_AUTH_PIN = "0629";
 
@@ -430,6 +431,80 @@ function filterPill(label, pressed, onSelect) {
   return b;
 }
 
+function getDocumentTheme() {
+  return document.documentElement.getAttribute("data-theme") === "dark"
+    ? "dark"
+    : "light";
+}
+
+function syncThemeColorMeta() {
+  const m = document.querySelector('meta[name="theme-color"]');
+  if (!m) return;
+  const dark = getDocumentTheme() === "dark";
+  m.setAttribute("content", dark ? "#000000" : "#f97316");
+}
+
+/** @param {"light" | "dark"} mode @param {{ persist?: boolean }} [opts] persist=true면 사용자가 고른 것으로 localStorage에 저장 */
+function setTheme(mode, opts = {}) {
+  const persist = opts.persist === true;
+  const next = mode === "dark" ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", next);
+  if (persist) {
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, next);
+    } catch {
+      /* 사파리 사설 모드 등 */
+    }
+  }
+  syncThemeColorMeta();
+  updateThemeToggleUI();
+}
+
+function userHasStoredTheme() {
+  try {
+    const s = localStorage.getItem(THEME_STORAGE_KEY);
+    return s === "light" || s === "dark";
+  } catch {
+    return false;
+  }
+}
+
+function updateThemeToggleUI() {
+  const btn = document.getElementById("theme-toggle");
+  if (!btn) return;
+  const dark = getDocumentTheme() === "dark";
+  btn.setAttribute(
+    "aria-label",
+    dark ? "라이트 모드로 전환" : "다크 모드로 전환"
+  );
+  btn.setAttribute("title", dark ? "라이트 모드" : "다크 모드");
+}
+
+function initThemeToggle() {
+  const btn = document.getElementById("theme-toggle");
+  if (!btn) return;
+  updateThemeToggleUI();
+  btn.addEventListener("click", () => {
+    setTheme(getDocumentTheme() === "dark" ? "light" : "dark", {
+      persist: true,
+    });
+  });
+}
+
+/** 저장된 테마가 없을 때만(첫 방문·「시스템 따름」) 모바일 OS 다크모드 전환에 맞춤 */
+function initSystemThemeListener() {
+  const mq = window.matchMedia("(prefers-color-scheme: dark)");
+  const onChange = () => {
+    if (userHasStoredTheme()) return;
+    setTheme(mq.matches ? "dark" : "light", { persist: false });
+  };
+  try {
+    mq.addEventListener("change", onChange);
+  } catch {
+    mq.addListener(onChange);
+  }
+}
+
 function initSearch() {
   const input = $("[data-search]");
   if (!input) return;
@@ -605,5 +680,7 @@ function initSiteGate() {
   });
 }
 
+initThemeToggle();
+initSystemThemeListener();
 initSearch();
 initSiteGate();
